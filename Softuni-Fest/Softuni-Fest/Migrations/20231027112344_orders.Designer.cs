@@ -12,8 +12,8 @@ using Softuni_Fest;
 namespace Softuni_Fest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231027110505_BaseTables")]
-    partial class BaseTables
+    [Migration("20231027112344_orders")]
+    partial class orders
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
