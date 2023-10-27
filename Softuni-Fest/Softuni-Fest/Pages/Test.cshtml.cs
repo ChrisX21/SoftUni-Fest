@@ -52,7 +52,7 @@ namespace Softuni_Fest.Pages
                 CancelURL = $"{serverAddress}/failed"
             };
 
-            User buyer = await _Context.Users.FirstAsync(x => x.UserName == "test2@gmail.com");
+            User buyer = await _Context.Users.FirstAsync(x => x.UserName == "test@client.com");
             Order order = await _Context.Orders.FirstAsync(x => x.UserId == buyer.Id);
 
             List<OrderProduct> cartItems = await _Context.OrderProducts.Where(x => x.OrderId == order.Id).ToListAsync();
