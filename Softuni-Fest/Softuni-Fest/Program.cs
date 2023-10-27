@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Softuni_Fest;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Repository;
+using Softuni_Fest.Services;
+using Stripe;
 
 namespace Softuni_Fest
 {
@@ -30,6 +32,10 @@ namespace Softuni_Fest
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderProductsRepository, OrderProductsRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            builder.Services.AddSingleton<StripeService>();
+
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 
             var app = builder.Build();
 

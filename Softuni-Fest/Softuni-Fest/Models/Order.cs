@@ -7,6 +7,7 @@ namespace Softuni_Fest
     {
         public Order()
         {
+            Id = Guid.NewGuid().ToString();
             OrderProducts = new HashSet<OrderProduct>();
             Id = Guid.NewGuid().ToString();
         }
