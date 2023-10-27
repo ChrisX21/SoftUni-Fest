@@ -8,8 +8,8 @@
         Task<bool> ProductExistsAsync(string id);
         Task<bool> SaveAsync();
         Task<Product> GetProductAsync(string id);
-        Task<ICollection<Order>> GetProductsAsync();
-        Task<ICollection<Order>> GetProductsAsyncForVendorId(string id);
-        Task<ICollection<Order>> GetProductsAsyncForOrderId(string id);
+        Task<ICollection<Product>> GetProductsAsync();
+        Task<ICollection<Product>> GetProductsAsyncForVendorId(string id);
+        Task<ICollection<Product>> GetProductsAsyncForOrderId(string id);
     }
 }

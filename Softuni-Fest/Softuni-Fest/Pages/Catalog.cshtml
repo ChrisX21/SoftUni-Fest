@@ -15,6 +15,17 @@
 
     </div>
     <br /> <br />
+    @if(Model.Products.Count == 0)
+    {
+        <p>No products</p>
+    }
+    else
+    {
+        foreach (var item in Model.Products)
+        {
+            <p>item</p>
+        }
+    }
     <table class="table table-bordered table-striped" style="width=100%">
         <thead>
             <tr>
