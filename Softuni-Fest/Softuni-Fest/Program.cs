@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Softuni_Fest;
+using Softuni_Fest.Interfaces;
+using Softuni_Fest.Repository;
+
 namespace Softuni_Fest
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            ApplicationDbContext context = new ApplicationDbContext();
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -14,22 +18,29 @@ namespace Softuni_Fest
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddTransient<SeedData>();
+            builder.Services.AddHostedService<SeederService>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderProductsRepository, OrderProductsRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
-            {
                 app.UseExceptionHandler("/Error");
-            }
+
             app.UseStaticFiles();
 
             app.UseRouting();
-                        app.UseAuthentication();;
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
