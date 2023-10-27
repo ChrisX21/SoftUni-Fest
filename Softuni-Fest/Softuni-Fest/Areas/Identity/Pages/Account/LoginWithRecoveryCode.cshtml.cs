@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Softuni_Fest;
+
 namespace Softuni_Fest.Areas.Identity.Pages.Account
 {
     public class LoginWithRecoveryCodeModel : PageModel
