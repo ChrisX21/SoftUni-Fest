@@ -5,6 +5,10 @@ namespace Softuni_Fest
 {
     public partial class OrderProduct
     {
+        public OrderProduct()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
         public string Id { get; set; } = null!;
         public string OrderId { get; set; } = null!;
         public string ProductId { get; set; } = null!;

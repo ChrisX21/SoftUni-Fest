@@ -7,13 +7,14 @@ namespace Softuni_Fest
     {
         public Product()
         {
+            Id = Guid.NewGuid().ToString();
             OrderProducts = new HashSet<OrderProduct>();
         }
 
         public string Id { get; set; } = null!;
         public string ProductName { get; set; } = null!;
         public string ProductDescription { get; set; } = null!;
-        public decimal ProductPrice { get; set; }
+        public long ProductPrice { get; set; }
         public string VendorId { get; set; } = null!;
         public int QuantityInStock { get; set; }
 

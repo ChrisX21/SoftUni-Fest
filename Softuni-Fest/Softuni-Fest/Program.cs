@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Softuni_Fest;
+using Softuni_Fest.Interfaces;
+using Softuni_Fest.Repository;
 
 namespace Softuni_Fest
 {
@@ -23,6 +25,11 @@ namespace Softuni_Fest
             builder.Services.AddRazorPages();
             builder.Services.AddTransient<SeedData>();
             builder.Services.AddHostedService<SeederService>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderProductsRepository, OrderProductsRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
             var app = builder.Build();
 
