@@ -1,0 +1,17 @@
+{
+	// copt these into appsettings.json and replace the stripe api key
+	"ConnectionStrings": {
+		"DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=SoftUniFest;Trusted_Connection=True;MultipleActiveResultSets=true"
+	},
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information",
+			"Microsoft.AspNetCore": "Warning"
+		}
+	},
+	"Stripe": {
+		"SecretKey": "SomeSecretKey",
+		"PublishableKey": "SomePublishableKey"
+	},
+	"AllowedHosts": "*"
+}

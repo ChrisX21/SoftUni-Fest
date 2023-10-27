@@ -210,8 +210,8 @@ namespace Softuni_Fest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ProductPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("ProductPrice")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("int");

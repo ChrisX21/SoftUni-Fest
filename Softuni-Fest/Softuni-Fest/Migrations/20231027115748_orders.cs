@@ -33,7 +33,7 @@ namespace Softuni_Fest.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProductPrice = table.Column<long>(type: "bigint", nullable: false),
                     VendorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuantityInStock = table.Column<int>(type: "int", nullable: false)
                 },
@@ -64,7 +64,7 @@ namespace Softuni_Fest.Migrations
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
-						onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_OrderProducts_Products_ProductId",
                         column: x => x.ProductId,
