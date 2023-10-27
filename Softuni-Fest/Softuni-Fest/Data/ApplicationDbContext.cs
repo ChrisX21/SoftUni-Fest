@@ -7,6 +7,10 @@ namespace Softuni_Fest
 {
 	public partial class ApplicationDbContext : IdentityDbContext<User>
 	{
+		public ApplicationDbContext() 
+		{
+		}
+
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
 			: base(options)
 		{
