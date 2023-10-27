@@ -28,8 +28,8 @@ namespace Softuni_Fest
 			if (_Context.Users.Any())
 				return;
 
-			IdentityRole businessRole = await _Context.Roles.FirstAsync(x => x.Name == "Business");
-			IdentityRole clientRole = await _Context.Roles.FirstAsync(x => x.Name == "Client");
+			//IdentityRole businessRole = await _Context.Roles.FirstAsync(x => x.Name == "Business");
+			//IdentityRole clientRole = await _Context.Roles.FirstAsync(x => x.Name == "Client");
 
 			// create business user
 			User businessUser = new();
@@ -38,7 +38,7 @@ namespace Softuni_Fest
             await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(businessUser, _BusinessEmail, CancellationToken.None);
 			businessUser.EmailConfirmed = true;
             var businessResult = await _UserManager.CreateAsync(businessUser, _Password);
-
+			await _UserManager.AddToRoleAsync(businessUser, "Business");
 
             // creat client user
             User clientUser = new();
@@ -47,6 +47,7 @@ namespace Softuni_Fest
             await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(clientUser, _ClientEmail, CancellationToken.None);
             clientUser.EmailConfirmed = true;
             var clentResult = await _UserManager.CreateAsync(clientUser, _Password);
+            await _UserManager.AddToRoleAsync(clientUser, "Client");
         }
 
         public async Task SeedProductsAsync()

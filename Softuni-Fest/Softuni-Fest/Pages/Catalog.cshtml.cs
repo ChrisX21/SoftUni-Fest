@@ -6,6 +6,7 @@ using Softuni_Fest.Interfaces;
 
 namespace Softuni_Fest.Pages
 {
+    [Authorize(Roles = "Business, Client")]
     public class CatalogModel : PageModel
     {
         private readonly IProductRepository _ProductRepository;
@@ -18,20 +19,17 @@ namespace Softuni_Fest.Pages
             _ProductRepository = productRepository;
             _UserRepository = userRepository;
             _UserManager = userManager;
+            Products = new List<Product>();
         }
 
-        [Authorize(Roles = "Business")]
-        public async Task<ActionResult> OnGet()
+        public async Task OnGet()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            Products = await GetAllProductsForBusiness();
-            return StatusCode(200);
+            if(User.IsInRole("Business"))
+                Products = await GetAllProductsForBusiness();
         }
+
         public List<Product> Products { get; private set; } = null!;
+
         public async Task<List<Product>> GetAllProductsForBusiness()
         {
             string userId = _UserManager.GetUserId(User);
