@@ -6,7 +6,7 @@ using Softuni_Fest.Interfaces;
 
 namespace Softuni_Fest.Pages
 {
-    [Authorize(Roles = "Business")]
+    [Authorize(Roles = "Business, Client")]
     public class CatalogModel : PageModel
     {
         private readonly IProductRepository _ProductRepository;
@@ -19,6 +19,7 @@ namespace Softuni_Fest.Pages
             _ProductRepository = productRepository;
             _UserRepository = userRepository;
             _UserManager = userManager;
+            Products = new List<Product>();
         }
         public async Task OnGet()
         {
@@ -32,6 +33,7 @@ namespace Softuni_Fest.Pages
             }
         }
         public List<Product> Products { get; private set; } = null!;
+
         public async Task<List<Product>> GetAllProductsForBusiness()
         {
             string userId = _UserManager.GetUserId(User);
