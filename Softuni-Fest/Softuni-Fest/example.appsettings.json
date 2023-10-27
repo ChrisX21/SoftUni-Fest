@@ -1,5 +1,5 @@
 {
-	// copt these into appsettings.json and replace the stripe api key
+	// copy these into appsettings.json and replace the stripe api key
 	"ConnectionStrings": {
 		"DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=SoftUniFest;Trusted_Connection=True;MultipleActiveResultSets=true"
 	},
