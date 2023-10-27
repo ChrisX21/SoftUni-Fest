@@ -5,27 +5,28 @@
         <div class="border p-3 mt-4">
             <div class="row pb-2">
                 <h2 class="text-primary pl-3">Create product</h2>
-
             </div>
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text"/>
+                <input class="form-control" asp-for="Product.ProductName" aria-required="true" type="text" />
                 <label class="form-label">Name</label>
-                
             </div>
-            <br/>
+            <br />
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text"/>
+                <input class="form-control" asp-for="Product.ProductDescription" aria-required="true" type="text" />
                 <label class="form-label">Description</label>
-
             </div>
-            <br/>
+            <br />
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="number" />
+                <input class="form-control" asp-for="Product.ProductPrice" aria-required="true" type="number" />
                 <label class="form-label">Price</label>
-
             </div>
-            <br/>
+            <br /><div class="form-floating">
+                <input class="form-control" asp-for="Product.QuantityInStock" aria-required="true" type="number" />
+                <label class="form-label">Quantity</label>
+            </div>
+                <br />
             <button type="submit" class="btn btn-primary" style="width: 150px;">Create</button>
         </div>
     </form>
+
 }
