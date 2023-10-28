@@ -47,6 +47,11 @@ namespace Softuni_Fest.Repository
             return await _Context.Orders.ToListAsync();
         }
 
+        public Task<ICollection<Order>> GetOrdersForUserAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> OrderExistsAsync(string id)
         {
             return await _Context.Orders.AnyAsync(x => x.Id == id);

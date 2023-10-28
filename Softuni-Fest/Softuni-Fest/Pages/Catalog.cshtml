@@ -8,6 +8,7 @@
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary" style="font-size: 300%;">Product Catalog</h2>
+            <hr style="width:350px"/>
         </div>
         <div class="col-6">
             <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
@@ -15,17 +16,6 @@
 
     </div>
     <br /> <br />
-    @if(Model.Products.Count == 0)
-    {
-        <p>No products</p>
-    }
-    else
-    {
-        foreach (var item in Model.Products)
-        {
-            <p>item</p>
-        }
-    }
     <table class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr>
@@ -36,26 +26,18 @@
         </thead>
         <tbody>
             <tr>
-                <td width="30%">
-                    jesus
-                </td>
-                <td width="40%">
-                    CUM FROM MARS
-                </td>
-                <td width="10%">
-                    EDIN I PIDISE
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">
-                    Tomaa
-                </td>
-                <td width="40%">
-                    seks igrachka
-                </td>
-                <td width="10%">
-                    EDIN I PIDISE
-                </td>
+                @foreach(var product in Model.Products)
+                {
+                    <td width="30%">
+                        @product.ProductName
+                    </td>
+                    <td width="40%">
+                        @product.ProductDescription
+                    </td>
+                    <td width="10%">
+                        @product.ProductPrice
+                    </td>
+                }
             </tr>
         </tbody>
     </table>
