@@ -10,18 +10,17 @@
 
 <h1>Register</h1>
 
-    <form id="registerClientForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px">
-        <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle btn-lg" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select User Type
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item btn-lg" id="clientButton">Client</a>
-                <a class="dropdown-item btn-lg" id="vendorButton">Vendor</a>
-            </div>
-        </div>
-        <br />
-        <div id="clientFields" style="display: block">
+    <form id="registerFormRole" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+        <select asp-for="Input.Role" id="userRole" aria-required="true">
+            <option value="Client">Client</option>
+            <option value="Vendor">Vendor</option>
+        </select>
+        <span asp-validation-for="Input.Role" class="text-danger"></span>
+    </form>
+    <br />
+
+    <form id="registerFormClient" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: block">
+        <div id="clientFields">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
@@ -57,10 +56,10 @@
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             </div>
         </div>
-        </form>
+    </form>
 
     <form id="registerFormVendor" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: none">
-        <div id="vendorFields" style="display: none">
+        <div id="vendorFields">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
                 <input asp-for="Input.CompanyName" class="form-control" autocomplete="username" aria-required="true" />
@@ -91,18 +90,8 @@
             </div>
         </div>
 
-        <script>
-            document.getElementById("clientButton").addEventListener("click", function () {
-                document.getElementById("clientFields").style.display = "block";
-                document.getElementById("vendorFields").style.display = "none";
-            });
-
-            document.getElementById("vendorButton").addEventListener("click", function () {
-                document.getElementById("clientFields").style.display = "none";
-                document.getElementById("vendorFields").style.display = "block";
-            });
-        </script>
     </form>
+    <script src="~/js/register.js"></script>
     </div>
 
 @section Scripts {
