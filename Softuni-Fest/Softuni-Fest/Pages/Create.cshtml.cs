@@ -79,15 +79,5 @@ namespace Softuni_Fest.Pages
             }
             return RedirectToPage("/Catalog");
         }
-        public async Task<IActionResult> OnUpdate()
-        {
-            //Product product = await _ProductRepository.GetProductAsync(_ProductId);
-            //product = Product;
-            //if (!await _ProductRepository.UpdateProductAsync(product))
-            //{
-            //    return RedirectToPage("/Catalog");
-            //}
-            return RedirectToPage("/Catalog");
-        }
     }
 }
