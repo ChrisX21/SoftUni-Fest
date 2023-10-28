@@ -49,7 +49,7 @@
                     {
                         <form id="addItemForm" method="post" asp-page-handler="AddItemToCart" asp-route-productId="@product.Id">
                             <td width="10%"><input asp-for="@Model.ProductQuantity" /></td>
-                            <td><a href="#" onclick="addItemToCart()">Buy</a></td>
+                        <td><button id="checkoutButton" onclick="addItemToCart()" class="btn btn-primary" style="background-color: #4169E1; opacity: 0.8; width: 25%">Buy</button></td>
                         </form>
                     }
                     else
