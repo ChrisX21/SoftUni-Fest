@@ -6,34 +6,31 @@ using Softuni_Fest.Interfaces;
 
 namespace Softuni_Fest.Pages
 {
-    [Authorize(Roles = "Business, Client")]
     public class CatalogModel : PageModel
-    
+    {    
         private readonly IProductRepository _ProductRepository;
         private readonly IUserRepository _UserRepository;
         private readonly UserManager<User> _UserManager;
-        public CatalogModel(IProductRepository productRepository,
-            IUserRepository userRepository,
-            UserManager<User> userManager)
+
+        public CatalogModel()
         {
-            _ProductRepository = productRepository;
-            _UserRepository = userRepository;
-            _UserManager = userManager;
+            //_ProductRepository = productRepository;
+            //_UserRepository = userRepository;
+            //_UserManager = userManager;
             Products = new List<Product>();
         }
         public async Task OnGet()
         {
-            Products = _context.Products;
+            //Products = _context.Products;
             if (User.IsInRole("Business"))
             {
                 Products = await GetAllProductsForBusiness();
+                return;
             }
-            else if (User.IsInRole("Client"))
-            {
-                Products = await GetAllProductsForClient();
-            }
+
+            Products = await GetAllProductsForClient();
         }
-        public List<Product> Products { get; private set; } = null!;
+        public List<Product> Products { get; set; } = null!;
 
         public async Task<List<Product>> GetAllProductsForBusiness()
         {

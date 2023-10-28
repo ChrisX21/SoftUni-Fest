@@ -7,12 +7,13 @@ using Softuni_Fest.Repository;
 
 namespace Softuni_Fest.Pages
 {
+    // TODO: do
     [Authorize(Roles = "Business")]
-    public class createModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly IProductRepository _ProductRepository;
         private readonly UserManager<User> _UserManager;
-        public createModel(IProductRepository productRepository, UserManager<User> userManager)
+        public CreateModel(IProductRepository productRepository, UserManager<User> userManager)
         {
             _ProductRepository = productRepository;
             _UserManager = userManager;
@@ -23,8 +24,8 @@ namespace Softuni_Fest.Pages
         }
         public async Task<IActionResult> OnPost(Product product)
         {
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            //await _context.Products.AddAsync(product);
+            //await _context.SaveChangesAsync();
             return RedirectToPage("Catalog");
         }
         [BindProperty]
@@ -53,12 +54,12 @@ namespace Softuni_Fest.Pages
         }
         public async Task<IActionResult> OnUpdate()
         {
-            Product product = await _ProductRepository.GetProductAsync(_ProductId);
-            product = Product;
-            if (!await _ProductRepository.UpdateProductAsync(product))
-            {
-                return Redirect("/Index");
-            }
+            //Product product = await _ProductRepository.GetProductAsync(_ProductId);
+            //product = Product;
+            //if (!await _ProductRepository.UpdateProductAsync(product))
+            //{
+            //    return Redirect("/Index");
+            //}
             return Page();
         }
     }

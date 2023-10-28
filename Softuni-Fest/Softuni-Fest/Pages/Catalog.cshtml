@@ -2,6 +2,7 @@
 @model Softuni_Fest.Pages.CatalogModel
 @{
     ViewData["Title"] = "Catalog";
+    // ViewBag["Tile"] = "Test";
 }
 
 <div class="container p-3">
@@ -16,7 +17,18 @@
 
     </div>
     <br /> <br />
-    <table class="table table-bordered table-striped" style="">
+    @if(Model.Products.Count == 0)
+    {
+        <p>No products</p>
+    }
+    else
+    {
+        foreach (var item in Model.Products)
+        {
+            <p>item</p>
+        }
+    }
+    <table class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -28,16 +40,27 @@
             <tr>
                 @foreach(var product in Model.Products)
                 {
+                    <td width="30%">
+                        @product.ProductName;
+                    </td>
+                    <td width="40%">
+                        @product.ProductDescription;
+                    </td>
+                    <td width="10%">
+                        @product.ProductPrice;
+                    </td>
+                }
+            </tr>
+            <tr>
                 <td width="30%">
-                    @product.ProductName;
+                    Tomaa
                 </td>
                 <td width="40%">
-                    @product.ProductDescription;
+                    seks igrachka
                 </td>
                 <td width="10%">
-                    @product.ProductPrice;
+                    EDIN I PIDISE
                 </td>
-                }
             </tr>
         </tbody>
     </table>

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Softuni_Fest;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Repository;
 using Softuni_Fest.Services;
@@ -32,8 +31,8 @@ namespace Softuni_Fest
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderProductsRepository, OrderProductsRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<StripeService>();
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
-            builder.Services.AddSingleton<StripeService>();
 
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 

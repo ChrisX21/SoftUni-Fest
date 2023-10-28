@@ -1,6 +1,50 @@
 ﻿@page
+@using Softuni_Fest;
 @model Softuni_Fest.Pages.OrdersModel
 @{
     ViewData["Title"] = "Orders";
 }
 <h1 class="text-center">Orders</h1>
+
+<div class="container p-3">
+    @if (Model.OrderItems is not null)
+    {
+        <table class="table table-bordered table-striped" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.OrderItems)
+                {
+                    Product? product = await Model.GetProduct(item.ProductId);
+                    if (product is null)
+                        continue;
+
+                    <tr>
+                        <td id="productName" width="30%">
+                            @product.ProductName
+                        </td>
+                        <td id="productPrice" width="10%">
+                            @product.ProductPrice
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="row pt-4">
+            <div class="col-6">
+                <form id="checkoutForm" class="form-inline" asp-page="/">
+                    <button id="checkoutButton" type="submit" class="btn btn-primary">Buy</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1>No products in cart</h1>
+    }
+</div>
