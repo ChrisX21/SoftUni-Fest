@@ -19,6 +19,6 @@
 		"Host": "example",
 		"Username": "example",
 		"Password": "example"
-	}
+	},
 	"AllowedHosts": "*"
 }
