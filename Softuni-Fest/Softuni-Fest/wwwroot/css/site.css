@@ -14,5 +14,17 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+
+}
+
+.no-decor {
+    text-decoration: none;
 }

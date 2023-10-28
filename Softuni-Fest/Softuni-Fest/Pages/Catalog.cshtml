@@ -1,51 +1,57 @@
 ﻿@page
+@using Softuni_Fest.Models
+@using System.Globalization
 @model Softuni_Fest.Pages.CatalogModel
 @{
     ViewData["Title"] = "Catalog";
+    CultureInfo bgCulture = new CultureInfo("en-BG");
 }
 
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary" style="font-size: 300%;">Product Catalog</h2>
+            <h2 class="text-primary" style="font-size: 300%;">Products</h2>
+            <hr style="width:350px"/>
         </div>
-        <div class="col-6">
-            <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
-        </div>
+        @if (User.IsInRole(Roles.Business))
+        {
+            <div class="col-6">
+                <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
+            </div>
+        }
 
     </div>
     <br /> <br />
-    <table class="table table-bordered table-striped" style="width=100%">
+    <table class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Price</th>
+                @if (User.IsInRole(Roles.Client))
+                {
+                    <th>Quantity</th>
+                }
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td width="30%">
-                    jesus
-                </td>
-                <td width="40%">
-                    CUM FROM MARS
-                </td>
-                <td width="10%">
-                    EDIN I PIDISE
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">
-                    Tomaa
-                </td>
-                <td width="40%">
-                    seks igrachka
-                </td>
-                <td width="15%">
-                    EDIN I PIDISE
-                </td>
-            </tr>
+            @foreach(var product in await Model.GetProductsForCurrentUser())
+            {
+                <tr>
+                    <td width="20%">@product.ProductName</td>
+                    <td width="30%">@product.ProductDescription</td>
+                    <td width="10%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
+                    @if (User.IsInRole(Roles.Client))
+                    {
+                        <form id="addItemForm" method="post" asp-page-handler="AddItemToCart" asp-route-productId="@product.Id">
+                            <td width="10%"><input asp-for="@Model.ProductQuantity" /></td>
+                            <td><a href="#" onclick="addItemToCart()">Buy</a></td>
+                        </form>
+                    }
+                </tr>
+            }
         </tbody>
     </table>
+
+    <script src="~/js/catalog.js"></script>
 </div>

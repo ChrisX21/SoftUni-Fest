@@ -2,6 +2,9 @@
 {
     public interface IOrderRepository
     {
+        Task<Order?> GetOrCreateOrderForUserAsync(string userId);
+        Task<Order?> CreateOrderAsync(string userId);
+        Task<Order?> GetOrderForUserAsync(string userId);
         Task<bool> AddOrderAsync(Order order);
         Task<bool> RemoveOrderAsync(Order order);
         Task<bool> UpdateOrderAsync(Order order);

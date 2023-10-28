@@ -3,23 +3,36 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Softuni_Fest.Interfaces;
+using Softuni_Fest.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
 
 namespace Softuni_Fest.Pages
 {
     public class CatalogModel : PageModel
     {
         private readonly IProductRepository _ProductRepository;
+        private readonly IOrderRepository _OrderRepository;
+        private readonly IOrderProductsRepository _OrderProductRepository;
         private readonly IUserRepository _UserRepository;
         private readonly UserManager<User> _UserManager;
+        private readonly ILogger<CatalogModel> _Logger;
         public CatalogModel(IProductRepository productRepository,
-            IUserRepository userRepository,
-            UserManager<User> userManager)
+                            IOrderRepository orderRepository,
+                            IOrderProductsRepository orderProductsRepository,
+                            UserManager<User> userManager,
+                            ILogger<CatalogModel> logger,
+                            IUserRepository userRepository)
         {
             _ProductRepository = productRepository;
-            _UserRepository = userRepository;
+            _OrderRepository = orderRepository;
+            _OrderProductRepository = orderProductsRepository;
             _UserManager = userManager;
+            _Logger = logger;
             Products = new List<Product>();
             Users = new List<User>();
+            _UserRepository = userRepository;
         }
         public async Task OnGet()
         {
@@ -34,18 +47,55 @@ namespace Softuni_Fest.Pages
             {
                 Console.WriteLine(item.ProductName);
             }
-            if (User.IsInRole("Business"))
+            if (User.IsInRole(Roles.Business))
             {
                 Products = await GetAllProductsForBusiness();
+                return;
             }
-            else
-            {
-                Products = await GetAllProductsForClient();
-            }
+            Products = await GetAllProductsForClient();
         }
         public List<Product> Products { get; private set; } = null!;
         public List<User> Users { get; private set; } = null!;
 
+        public async Task<List<Product>> GetProductsForCurrentUser()
+        {
+            if (User.IsInRole(Roles.Business))
+                return await GetAllProductsForBusiness();
+
+            return await GetAllProductsForClient();
+        }
+
+        public async Task OnPostAddItemToCart(string productId)
+        {
+            string userId = _UserManager.GetUserId(User);
+            Order? order = await _OrderRepository.GetOrCreateOrderForUserAsync(userId);
+
+            if (order is null)
+            {
+                _Logger.LogError("Couldn't retrieve or create order");
+                return;
+            }
+
+            Product? product = await _ProductRepository.GetProductByIdAsync(productId);
+            if (product is null)
+            {
+                _Logger.LogError("Invalid product id");
+                return;
+            }
+
+            OrderProduct? orderProduct =
+                    await _OrderProductRepository.
+                            GetOrCreateOrderItemAsync(order.Id, product.Id);
+
+            if (orderProduct is null)
+            {
+                _Logger.LogError("Couldn't retrieve or create cart item");
+                return;
+            }
+
+            orderProduct.Quantity += ProductQuantity;
+            await _OrderProductRepository.SaveAsync();
+        }
         public async Task<List<Product>> GetAllProductsForBusiness()
         {
             string userId = _UserManager.GetUserId(User);
@@ -56,7 +106,6 @@ namespace Softuni_Fest.Pages
         public async Task<List<Product>> GetAllProductsForClient()
         {
             List<Product> products = (await _ProductRepository.GetProductsAsync()).ToList();
-
             return products;
         }
 
@@ -73,5 +122,7 @@ namespace Softuni_Fest.Pages
                 Products.AddRange(productsForVendor);
             }
         }
+        [BindProperty]
+        public int ProductQuantity { get; set; } = 1;
     }
 }
