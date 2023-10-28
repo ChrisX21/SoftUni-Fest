@@ -1,3 +1,4 @@
+using Castle.Core.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Softuni_Fest.Interfaces;
@@ -31,9 +32,11 @@ namespace Softuni_Fest
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderProductsRepository, OrderProductsRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<StripeService>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
-
+            builder.Services.AddSingleton<StripeService>();
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mail"));
+          
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 
             var app = builder.Build();
