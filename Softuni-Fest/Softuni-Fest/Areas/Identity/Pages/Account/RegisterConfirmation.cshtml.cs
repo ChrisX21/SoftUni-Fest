@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using Softuni_Fest;
+using Softuni_Fest.Services;
 
 namespace Softuni_Fest.Areas.Identity.Pages.Account
 {

@@ -42,7 +42,6 @@ namespace Softuni_Fest.Pages
         }
         public async Task<List<Product>> GetAllProductsForClient()
         {
-            string userId = _UserManager.GetUserId(User);
             List<Product> products = (await _ProductRepository.GetProductsAsync()).ToList();
 
             return products;

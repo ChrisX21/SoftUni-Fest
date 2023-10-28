@@ -36,7 +36,7 @@ namespace Softuni_Fest
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             builder.Services.AddSingleton<StripeService>();
-
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mail"));
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 
             var app = builder.Build();

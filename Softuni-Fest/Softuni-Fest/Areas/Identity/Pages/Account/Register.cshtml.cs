@@ -20,7 +20,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Softuni_Fest;
+using Softuni_Fest.Services;
 
 namespace Softuni_Fest.Areas.Identity.Pages.Account
 {
@@ -32,13 +34,14 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly MailSettings _mailSettings;
         public RegisterModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<MailSettings> mailSettings)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,6 +49,7 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _mailSettings = mailSettings.Value;
         }
 
         /// <summary>
@@ -176,18 +180,18 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
             {
                 MailMessage message = new MailMessage();
                 SmtpClient smtpClient = new SmtpClient();
-                message.From = new MailAddress("otpusnatitemomcheta@gmail.com");
+                message.From = new MailAddress(_mailSettings.Sender);
                 message.To.Add(email);
                 message.Subject = subject;
                 message.IsBodyHtml = true;
                 message.Body = confirmLink;
 
-                smtpClient.Port = 587;
-                smtpClient.Host = "sandbox.smtp.mailtrap.io";
+                smtpClient.Port = _mailSettings.Port;
+                smtpClient.Host = _mailSettings.Host;
 
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential("cc7ab3acd43449", "684e8a1d899a1a");
+                smtpClient.Credentials = new NetworkCredential(_mailSettings.Username, _mailSettings.Password);
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtpClient.Send(message);
                 return true;
