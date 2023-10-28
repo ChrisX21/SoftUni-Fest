@@ -71,6 +71,21 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+          
+            [StringLength(100)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+            //First name and last name are not used, they need to be saved.
+        
+            [StringLength(100)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+           
+            [StringLength(100)]
+            [Display(Name = "Company Name")]
+            public string CompanyName { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -114,7 +129,6 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

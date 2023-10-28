@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Stripe;
-using System.Data;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Softuni_Fest
 {
 	public class SeedData
 	{
 		public SeedData(ApplicationDbContext context,
-						RoleManager<IdentityRole> roleManager)
+						RoleManager<IdentityRole> roleManager,
+						UserManager<User> userManager,
+                        IUserStore<User> userStore)
 		{
 			_RoleManager = roleManager;
+			_UserManager = userManager;
 			_Context = context;
+			_UserStore = userStore;
 		}
 
 		public async Task SeedRolesAsync() 
@@ -23,16 +23,43 @@ namespace Softuni_Fest
 				await CreateRoleAsync(new IdentityRole(role));
 		}
 
-		public async Task SeedProductsAsync()
+		public async Task SeedUserAsync() 
+		{
+			if (_Context.Users.Any())
+				return;
+
+			//IdentityRole businessRole = await _Context.Roles.FirstAsync(x => x.Name == "Business");
+			//IdentityRole clientRole = await _Context.Roles.FirstAsync(x => x.Name == "Client");
+
+			// create business user
+			User businessUser = new();
+
+            await _UserStore.SetUserNameAsync(businessUser, _BusinessEmail, CancellationToken.None);
+            await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(businessUser, _BusinessEmail, CancellationToken.None);
+			businessUser.EmailConfirmed = true;
+            var businessResult = await _UserManager.CreateAsync(businessUser, _Password);
+			await _UserManager.AddToRoleAsync(businessUser, "Business");
+
+            // creat client user
+            User clientUser = new();
+
+            await _UserStore.SetUserNameAsync(clientUser, _ClientEmail, CancellationToken.None);
+            await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(clientUser, _ClientEmail, CancellationToken.None);
+            clientUser.EmailConfirmed = true;
+            var clentResult = await _UserManager.CreateAsync(clientUser, _Password);
+            await _UserManager.AddToRoleAsync(clientUser, "Client");
+        }
+
+        public async Task SeedProductsAsync()
 		{
 			if (_Context.Products.Any())
 				return;
 
-			User user = await _Context.Users.FirstAsync(x => x.UserName == "test2@gmail.com");
+			User user = await _Context.Users.FirstAsync(x => x.UserName == _BusinessEmail);
 
 			Product product1 = new Product() 
 			{
-				ProductName = "Test1",
+				ProductName = _ProductName,
 				ProductDescription = "This is a test product",
 				ProductPrice = 1000,
 				VendorId = user.Id
@@ -47,7 +74,7 @@ namespace Softuni_Fest
 			if (_Context.Orders.Any())
 				return;
 
-            User user = await _Context.Users.FirstAsync(x => x.UserName == "test2@gmail.com");
+            User user = await _Context.Users.FirstAsync(x => x.UserName == _ClientEmail);
 
 			Order order = new Order() 
 			{
@@ -63,7 +90,7 @@ namespace Softuni_Fest
 			if (_Context.OrderProducts.Any())
 				return;
 
-			Product product = await _Context.Products.FirstAsync(x => x.ProductName == "Test1");
+			Product product = await _Context.Products.FirstAsync(x => x.ProductName == _ProductName);
 			Order order = await _Context.Orders.FirstAsync();
 
 			OrderProduct orderProduct = new OrderProduct() 
@@ -84,8 +111,14 @@ namespace Softuni_Fest
 		}
 
 		private readonly RoleManager<IdentityRole> _RoleManager;
+		private readonly UserManager<User> _UserManager;
 		private readonly ApplicationDbContext _Context;
-	}
+		private readonly IUserStore<User> _UserStore;
+		private const string _Password = "test@T1";
+		private const string _BusinessEmail = "test@business.com";
+		private const string _ClientEmail = "test@client.com";
+		private const string _ProductName = "Test1";
+    }
 
 	public class SeederService : IHostedService
 	{
@@ -100,10 +133,11 @@ namespace Softuni_Fest
 			{
 				var seeder = scope.ServiceProvider.GetRequiredService<SeedData>();
 				await seeder.SeedRolesAsync();
+				await seeder.SeedUserAsync();
 				await seeder.SeedProductsAsync();
 				await seeder.SeedOrderAsync();
 				await seeder.SeedCartItemAsync();
-            }
+			}
 		}
 
 		public Task StopAsync(CancellationToken cancellationToken)
