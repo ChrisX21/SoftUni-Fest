@@ -6,7 +6,6 @@ using Softuni_Fest.Interfaces;
 
 namespace Softuni_Fest.Pages
 {
-    [Authorize(Roles = "Business, Client")]
     public class CatalogModel : PageModel
     {
         private readonly IProductRepository _ProductRepository;
@@ -27,7 +26,7 @@ namespace Softuni_Fest.Pages
             {
                 Products = await GetAllProductsForBusiness();
             }
-            else if (User.IsInRole("Client"))
+            else
             {
                 Products = await GetAllProductsForClient();
             }
