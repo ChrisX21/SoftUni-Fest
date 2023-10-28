@@ -3,6 +3,12 @@
     document.getElementById('addItemForm').submit();
 }
 
-function deleteItem() {
+function deleteItem()
+{
     document.getElementById('deleteItemForm').submit();
+}
+
+function buyItem()
+{
+    document.getElementById('checkoutForm').submit();
 }
