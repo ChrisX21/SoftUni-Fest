@@ -22,12 +22,6 @@ using Softuni_Fest;
 
 namespace Softuni_Fest.Areas.Identity.Pages.Account
 {
-    public enum Role
-    {
-        Client = 0,
-        Business
-
-    }
 
     public class RegisterModel : PageModel
     {
