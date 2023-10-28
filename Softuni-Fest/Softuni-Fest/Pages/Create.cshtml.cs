@@ -1,15 +1,21 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Softuni_Fest.Interfaces;
+using Softuni_Fest.Repository;
 
 namespace Softuni_Fest.Pages
 {
+    [Authorize(Roles = "Business")]
     public class createModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        public Product product { get; set; }
-        public createModel(ApplicationDbContext context)
+        private readonly IProductRepository _ProductRepository;
+        private readonly UserManager<User> _UserManager;
+        public createModel(IProductRepository productRepository, UserManager<User> userManager)
         {
-            _context = context;
+            _ProductRepository = productRepository;
+            _UserManager = userManager;
         }
         public void OnGet()
         {
@@ -20,6 +26,40 @@ namespace Softuni_Fest.Pages
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return RedirectToPage("Catalog");
+        }
+        [BindProperty]
+        public Product Product { get; set; }
+        public async Task<IActionResult> OnPost()
+        {
+            string userId = _UserManager.GetUserId(User);
+
+            Product.VendorId = userId;
+
+            if (!await _ProductRepository.AddProductAsync(Product))
+            {
+                return Redirect("/Index");
+            }
+            return Page();
+        }
+        //[BindProperty]
+        public string _ProductId { get; set; }
+        public async Task<IActionResult> OnDelete()
+        {
+            if(!await _ProductRepository.RemoveProductAsync(Product))
+            {
+                return Redirect("/Index");
+            }
+            return Page();
+        }
+        public async Task<IActionResult> OnUpdate()
+        {
+            Product product = await _ProductRepository.GetProductAsync(_ProductId);
+            product = Product;
+            if (!await _ProductRepository.UpdateProductAsync(product))
+            {
+                return Redirect("/Index");
+            }
+            return Page();
         }
     }
 }

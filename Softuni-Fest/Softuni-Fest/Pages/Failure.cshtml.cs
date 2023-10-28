@@ -5,11 +5,11 @@ using Softuni_Fest.Services;
 
 namespace Softuni_Fest.Pages
 {
-    public class IndexModel : PageModel
+    public class FailureModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<FailureModel> _logger;
         
-        public IndexModel(ILogger<IndexModel> logger)
+        public FailureModel(ILogger<FailureModel> logger)
         {
             _logger = logger;
         }
@@ -18,5 +18,6 @@ namespace Softuni_Fest.Pages
         {
 
         }
+
     }
 }

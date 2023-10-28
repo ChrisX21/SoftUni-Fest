@@ -10,22 +10,24 @@
             <div class="form-floating">
                 <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductName" />
                 <label class="form-label">Name</label>
-                
             </div>
-            <br/>
+            <br />
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductDescription"/>
+                <input class="form-control" asp-for="Product.ProductDescription" aria-required="true" type="text" />
                 <label class="form-label">Description</label>
-
             </div>
-            <br/>
+            <br />
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductPrice"/>
+                <input class="form-control" asp-for="Product.ProductPrice" aria-required="true" type="number" />
                 <label class="form-label">Price</label>
-
             </div>
-            <br/>
+            <br /><div class="form-floating">
+                <input class="form-control" asp-for="Product.QuantityInStock" aria-required="true" type="number" />
+                <label class="form-label">Quantity</label>
+            </div>
+                <br />
             <button type="submit" class="btn btn-primary" style="width: 150px;">Create</button>
         </div>
     </form>
+
 }
