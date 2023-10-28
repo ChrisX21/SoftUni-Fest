@@ -57,7 +57,7 @@ namespace Softuni_Fest.Pages
 
             List<OrderProduct> cartItems = await _Context.OrderProducts.Where(x => x.OrderId == order.Id).ToListAsync();
 
-            Session? session = await _StripeService.Checkout(cartItems, _Context);
+            Session? session = await _StripeService.Checkout(cartItems);
 
             if (session is null)
             {

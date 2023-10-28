@@ -1,7 +1,6 @@
 using Castle.Core.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Softuni_Fest;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Repository;
 using Softuni_Fest.Services;
@@ -15,8 +14,9 @@ namespace Softuni_Fest
         {
             ApplicationDbContext context = new ApplicationDbContext();
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            // Add services to the container.
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -24,7 +24,6 @@ namespace Softuni_Fest
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddTransient<SeedData>();
             builder.Services.AddHostedService<SeederService>();
@@ -37,6 +36,7 @@ namespace Softuni_Fest
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             builder.Services.AddSingleton<StripeService>();
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mail"));
+          
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 
             var app = builder.Build();

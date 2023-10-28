@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Softuni_Fest.Models;
 
 namespace Softuni_Fest
 {
@@ -16,20 +17,17 @@ namespace Softuni_Fest
 			_UserStore = userStore;
 		}
 
-		public async Task SeedRolesAsync() 
+		public async Task SeedRolesAsync()
 		{
-			string[] roles = new string[] { "Business", "Client" };
+			string[] roles = new string[] { Roles.Business, Roles.Client };
 			foreach (string role in roles) 
 				await CreateRoleAsync(new IdentityRole(role));
 		}
 
-		public async Task SeedUserAsync() 
+		public async Task SeedUserAsync()
 		{
 			if (_Context.Users.Any())
 				return;
-
-			//IdentityRole businessRole = await _Context.Roles.FirstAsync(x => x.Name == "Business");
-			//IdentityRole clientRole = await _Context.Roles.FirstAsync(x => x.Name == "Client");
 
 			// create business user
 			User businessUser = new();
@@ -38,7 +36,7 @@ namespace Softuni_Fest
             await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(businessUser, _BusinessEmail, CancellationToken.None);
 			businessUser.EmailConfirmed = true;
             var businessResult = await _UserManager.CreateAsync(businessUser, _Password);
-			await _UserManager.AddToRoleAsync(businessUser, "Business");
+			await _UserManager.AddToRoleAsync(businessUser, Roles.Business);
 
             // creat client user
             User clientUser = new();
@@ -47,7 +45,7 @@ namespace Softuni_Fest
             await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(clientUser, _ClientEmail, CancellationToken.None);
             clientUser.EmailConfirmed = true;
             var clentResult = await _UserManager.CreateAsync(clientUser, _Password);
-            await _UserManager.AddToRoleAsync(clientUser, "Client");
+            await _UserManager.AddToRoleAsync(clientUser, Roles.Client);
         }
 
         public async Task SeedProductsAsync()
@@ -69,7 +67,7 @@ namespace Softuni_Fest
 			await _Context.SaveChangesAsync();
 		}
 
-		public async Task SeedOrderAsync() 
+		public async Task SeedOrderAsync()
 		{
 			if (_Context.Orders.Any())
 				return;
@@ -85,7 +83,7 @@ namespace Softuni_Fest
             await _Context.SaveChangesAsync();
         }
 
-		public async Task SeedCartItemAsync() 
+		public async Task SeedCartItemAsync()
 		{
 			if (_Context.OrderProducts.Any())
 				return;
@@ -104,7 +102,7 @@ namespace Softuni_Fest
 			await _Context.SaveChangesAsync();
 		}
 
-		public async Task CreateRoleAsync(IdentityRole role) 
+		public async Task CreateRoleAsync(IdentityRole role)
 		{
 			if (!await _RoleManager.RoleExistsAsync(role.Name))
 				await _RoleManager.CreateAsync(role);
@@ -122,7 +120,7 @@ namespace Softuni_Fest
 
 	public class SeederService : IHostedService
 	{
-		public SeederService(IServiceProvider serviceProvider) 
+		public SeederService(IServiceProvider serviceProvider)
 		{
 			_ServiceProvider = serviceProvider;
 		}
