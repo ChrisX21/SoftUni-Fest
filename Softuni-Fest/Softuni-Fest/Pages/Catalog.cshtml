@@ -10,7 +10,7 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary" style="font-size: 300%;">Products</h2>
+            <h2 class="text-primary" style="font-size: 300%;">Products Catalog</h2>
             <hr style="width:350px"/>
         </div>
         @if (User.IsInRole(Roles.Business))
@@ -30,7 +30,8 @@
                 <th style="text-align: center;">Price</th>
                 @if (User.IsInRole(Roles.Client))
                 {
-                    <th>Quantity</th>
+                    <th style="text-align:center">Quantity</th>
+                    <th style="text-align:center">Options</th>
                 }
                 else
                 {
@@ -48,15 +49,18 @@
                     @if (User.IsInRole(Roles.Client))
                     {
                         <form id="addItemForm" method="post" asp-page-handler="AddItemToCart" asp-route-productId="@product.Id">
-                            <td width="10%"><input asp-for="@Model.ProductQuantity" /></td>
-                        <td><button id="checkoutButton" onclick="addItemToCart()" class="btn btn-primary" style="background-color: #4169E1; opacity: 0.8; width: 25%">Buy</button></td>
+                            <td width="10%" style="text-align:center;"><input asp-for="@Model.ProductQuantity" /></td>
+                            <td style="text-align:center"><a href="#" onclick="addItemToCart()" class="btn btn-danger" style="text-align:center">Buy</a></td>
+
                         </form>
                     }
                     else
                     {
-                        <td width="20%" style="text-align: center;">
-                            <a asp-action="Delete" class="btn btn-danger">Delete</a>
-                        </td>
+                        <form id="deleteItemForm" method="post" asp-page-handler="Delete">
+                            <td width="20%" style="text-align: center;">
+                              <a href="#" onclick="deleteItem()" class="btn btn-danger">Delete</a>
+                            </td>
+                        </form>
                     }
                 </tr>
             }
