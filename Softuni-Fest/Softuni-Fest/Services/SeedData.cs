@@ -16,20 +16,17 @@ namespace Softuni_Fest
 			_UserStore = userStore;
 		}
 
-		public async Task SeedRolesAsync() 
+		public async Task SeedRolesAsync()
 		{
 			string[] roles = new string[] { "Business", "Client" };
 			foreach (string role in roles) 
 				await CreateRoleAsync(new IdentityRole(role));
 		}
 
-		public async Task SeedUserAsync() 
+		public async Task SeedUserAsync()
 		{
 			if (_Context.Users.Any())
 				return;
-
-			//IdentityRole businessRole = await _Context.Roles.FirstAsync(x => x.Name == "Business");
-			//IdentityRole clientRole = await _Context.Roles.FirstAsync(x => x.Name == "Client");
 
 			// create business user
 			User businessUser = new();
@@ -69,7 +66,7 @@ namespace Softuni_Fest
 			await _Context.SaveChangesAsync();
 		}
 
-		public async Task SeedOrderAsync() 
+		public async Task SeedOrderAsync()
 		{
 			if (_Context.Orders.Any())
 				return;
@@ -85,7 +82,7 @@ namespace Softuni_Fest
             await _Context.SaveChangesAsync();
         }
 
-		public async Task SeedCartItemAsync() 
+		public async Task SeedCartItemAsync()
 		{
 			if (_Context.OrderProducts.Any())
 				return;
@@ -104,7 +101,7 @@ namespace Softuni_Fest
 			await _Context.SaveChangesAsync();
 		}
 
-		public async Task CreateRoleAsync(IdentityRole role) 
+		public async Task CreateRoleAsync(IdentityRole role)
 		{
 			if (!await _RoleManager.RoleExistsAsync(role.Name))
 				await _RoleManager.CreateAsync(role);
@@ -122,7 +119,7 @@ namespace Softuni_Fest
 
 	public class SeederService : IHostedService
 	{
-		public SeederService(IServiceProvider serviceProvider) 
+		public SeederService(IServiceProvider serviceProvider)
 		{
 			_ServiceProvider = serviceProvider;
 		}

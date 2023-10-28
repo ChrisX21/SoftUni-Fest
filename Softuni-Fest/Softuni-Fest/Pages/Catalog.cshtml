@@ -15,7 +15,18 @@
 
     </div>
     <br /> <br />
-    <table class="table table-bordered table-striped" style="width=100%">
+    @if(Model.Products.Count == 0)
+    {
+        <p>No products</p>
+    }
+    else
+    {
+        foreach (var item in Model.Products)
+        {
+            <p>item</p>
+        }
+    }
+    <table class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -42,7 +53,7 @@
                 <td width="40%">
                     seks igrachka
                 </td>
-                <td width="15%">
+                <td width="10%">
                     EDIN I PIDISE
                 </td>
             </tr>

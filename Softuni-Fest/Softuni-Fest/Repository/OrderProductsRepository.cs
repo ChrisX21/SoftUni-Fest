@@ -28,6 +28,30 @@ namespace Softuni_Fest.Repository
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<string?> CreateOrderItemAsync(string orderId, string productId) 
+        {
+            // TODO: check quantity in stock
+            OrderProduct orderItem = new() 
+            {
+                OrderId = orderId,
+                ProductId = productId,
+                Quantity = 1
+            };
+
+            await _Context.OrderProducts.AddAsync(orderItem);
+
+            if (!await SaveAsync())
+                return null;
+
+            return orderItem.Id;
+        }
+
+        public async Task<List<OrderProduct>> GetOrderItemsForOrderAsync(string orderId) 
+        {
+            List<OrderProduct> orderProducts = await _Context.OrderProducts.Where(x => x.OrderId == orderId).ToListAsync();
+            return orderProducts;
+        }
+
         public async Task<ICollection<OrderProduct>> GetOrderProductsAsync()
         {
             return await _Context.OrderProducts.ToListAsync();
