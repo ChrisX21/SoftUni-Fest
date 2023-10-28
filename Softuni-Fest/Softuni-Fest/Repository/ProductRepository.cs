@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Softuni_Fest.Interfaces;
 
 namespace Softuni_Fest.Repository
