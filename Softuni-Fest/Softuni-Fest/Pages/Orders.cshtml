@@ -5,46 +5,49 @@
 @{
     ViewData["Title"] = "Orders";
     CultureInfo bgCulture = new CultureInfo("en-BG");
+    ViewData["Title"] = "Cart";
 }
-
-<h1 class="text-center">Orders</h1>
+<h1 class="text-center">Cart</h1>
 
 <div class="container p-3">
     @if (Model.OrderItems is not null)
     {
-        <table class="table table-bordered table-striped" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                <form id="checkoutForm" class="form-inline" asp-page="/">
-                    @for(int i = 0; i < Model.OrderItems.Count; i++)
-                    {
-                        Product? product = await Model.GetProduct(Model.OrderItems[i].ProductId);
-                        if (product is null)
-                            continue;
+        <form id="checkoutForm" class="form-inline" asp-page="/">
+            <table class="table table-bordered table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @for(int i = 0; i < Model.OrderItems.Count; i++)
+                        {
+                            Product? product = await Model.GetProduct(Model.OrderItems[i].ProductId);
+                            if (product is null)
+                                continue;
 
-                        <tr>
-                            <td id="productName" width="30%">
-                                @product.ProductName
-                            </td>
-                            <td id="productPrice" width="10%">
-                                @((product.ProductPrice / 100m).ToString("C2", bgCulture))
-                            </td>
-                            <td id="productQuantity" width="10%">
-                                <input asp-for="Quantities[i]" class="form-control"/>
-                            </td>
-                        </tr>
-                    }
-                    <a id="checkoutButton" onclick="checkout()" class="btn btn-primary">Buy</a>
-                </form>
-            </tbody>
-        </table>
-
+                            <tr>
+                                <td id="productName" width="30%">
+                                    @product.ProductName
+                                </td>
+                                <td id="productPrice" width="10%">
+                                    @((product.ProductPrice / 100m).ToString("C2", bgCulture))
+                                </td>
+                                <td id="productQuantity" width="10%">
+                                    <input asp-for="Quantities[i]" class="form-control"/>
+                                </td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+            <div class="row pt-4">
+                <div class="col-6">
+                    <a id="checkoutButton" onclick="checkout()" class="btn btn-primary" style="width:40%; margin-left: 82%">Buy</a>
+                </div>
+            </div>
+        </form>
     }
     else
     {
