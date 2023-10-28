@@ -18,7 +18,7 @@ namespace Softuni_Fest.Repository
             return await SaveAsync();
         }
 
-        public async Task<Product> GetProductAsync(string id)
+        public async Task<Product?> GetProductByIdAsync(string id)
         {
             return await _Context.Products.FindAsync(id);
         }
