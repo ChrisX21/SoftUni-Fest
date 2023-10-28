@@ -12,11 +12,11 @@ namespace Softuni_Fest.Pages
         private readonly IUserRepository _UserRepository;
         private readonly UserManager<User> _UserManager;
 
-        public CatalogModel()
+        public CatalogModel(IProductRepository productRepository, IUserRepository userRepository, UserManager<User> userManager)
         {
-            //_ProductRepository = productRepository;
-            //_UserRepository = userRepository;
-            //_UserManager = userManager;
+            _ProductRepository = productRepository;
+            _UserRepository = userRepository;
+            _UserManager = userManager;
             Products = new List<Product>();
         }
         public async Task OnGet()
@@ -41,8 +41,7 @@ namespace Softuni_Fest.Pages
         }
         public async Task<List<Product>> GetAllProductsForClient()
         {
-            string userId = _UserManager.GetUserId(User);
-            List<Product> products = (await _ProductRepository.GetProductsAsync()).ToList();
+           List<Product> products = (await _ProductRepository.GetProductsAsync()).ToList();
 
             return products;
         }
