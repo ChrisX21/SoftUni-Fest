@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Softuni_Fest.Interfaces;
 
 namespace Softuni_Fest.Repository
@@ -18,7 +17,7 @@ namespace Softuni_Fest.Repository
             return await SaveAsync();
         }
 
-        public async Task<Product> GetProductAsync(string id)
+        public async Task<Product?> GetProductByIdAsync(string id)
         {
             return await _Context.Products.FindAsync(id);
         }
@@ -63,21 +62,6 @@ namespace Softuni_Fest.Repository
         {
             _Context.Update(product);
             return await SaveAsync();
-        }
-
-        Task<ICollection<Order>> IProductRepository.GetProductsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ICollection<Order>> IProductRepository.GetProductsAsyncForOrderId(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ICollection<Order>> IProductRepository.GetProductsAsyncForVendorId(string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

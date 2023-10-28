@@ -22,6 +22,26 @@ namespace Softuni_Fest.Repository
             return await _Context.Orders.FindAsync(id);
         }
 
+        public async Task<string?> CreateOrderAsync(string userId) 
+        {
+            Order order = new()
+            {
+                UserId = userId
+            };
+
+            await _Context.AddAsync(order);
+            if (!await SaveAsync())
+                return null;
+
+            return order.Id;
+        }
+
+        public async Task<Order?> GetOrderForUserAsync(string userId) 
+        {
+            Order? order = await _Context.Orders.FirstOrDefaultAsync(x => x.UserId == userId);
+            return order;
+        }
+
         public async Task<ICollection<Order>> GetOrdersAsync()
         {
             return await _Context.Orders.ToListAsync();
