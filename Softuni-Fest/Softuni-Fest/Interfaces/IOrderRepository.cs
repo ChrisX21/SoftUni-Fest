@@ -9,5 +9,7 @@
         Task<bool> SaveAsync();
         Task<Order> GetOrderAsync(string id);
         Task<ICollection<Order>> GetOrdersAsync();
+        Task<ICollection<Order>> GetOrdersForUserAsync(string userId);
+
     }
 }

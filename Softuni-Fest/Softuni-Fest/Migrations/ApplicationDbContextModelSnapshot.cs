@@ -188,6 +188,9 @@ namespace Softuni_Fest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");

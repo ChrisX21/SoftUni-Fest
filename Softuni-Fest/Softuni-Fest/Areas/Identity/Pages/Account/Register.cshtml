@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -10,7 +10,7 @@
 
 <h1>Register</h1>
 
-    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px">
+    <form id="registerClientForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px">
         <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle btn-lg" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Select User Type
@@ -57,7 +57,9 @@
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             </div>
         </div>
+        </form>
 
+    <form id="registerFormVendor" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: none">
         <div id="vendorFields" style="display: none">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
