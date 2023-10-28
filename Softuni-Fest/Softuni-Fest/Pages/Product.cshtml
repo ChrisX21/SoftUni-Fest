@@ -1,4 +1,13 @@
 ﻿@page
 @model Softuni_Fest.Pages.ProductModel
 
-
+<form method="post" style="width:600px; margin-left:30%">
+    <div class="border p-3 mt-4">
+        <div class="form-floating">
+            <input class="form-control" asp-for="@Model.quantity" aria-required="true" type="number" />
+            <label class="form-label">Quantity</label>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary" style="width: 150px;">Buy</button>
+    </div>
+</form>
