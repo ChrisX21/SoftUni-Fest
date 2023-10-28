@@ -44,7 +44,7 @@
             {
                 <tr>
                     <td width="20%">@product.ProductName</td>
-                    <td width="30%">@product.ProductDescription</td>
+                    <td width="30%">@(product.ProductDescription ?? "None")</td>
                     <td width="10%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
                     @if (User.IsInRole(Roles.Client))
                     {
@@ -54,7 +54,7 @@
 
                         </form>
                     }
-                    else
+                    else if(User.IsInRole(Roles.Business))
                     {
                         <form id="deleteItemForm" method="post" asp-page-handler="Delete">
                             <td width="20%" style="text-align: center;">
@@ -69,3 +69,4 @@
 
     <script src="~/js/catalog.js"></script>
 </div>
+
