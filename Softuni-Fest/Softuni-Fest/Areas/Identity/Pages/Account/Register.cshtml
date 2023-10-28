@@ -10,18 +10,17 @@
 
 <h1>Register</h1>
 
-    <form id="registerFormRole" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-        <select asp-for="Input.Role" id="userRole" aria-required="true">
+
+
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: block">
+        <select asp-for="Input.Role" class="form-control" id="userRole" aria-required="true">
             <option value="Client">Client</option>
             <option value="Vendor">Vendor</option>
         </select>
         <span asp-validation-for="Input.Role" class="text-danger"></span>
-    </form>
-    <br />
-
-    <form id="registerFormClient" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: block">
-        <div id="clientFields">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <br />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div id="clientFields" style="display: block;">
             <div class="form-floating">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.FirstName"></label>
@@ -32,65 +31,41 @@
                 <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.LastName"></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
+                </div>
             <br />
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <br />
-            <div>
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-            </div>
         </div>
-    </form>
-
-    <form id="registerFormVendor" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: none">
-        <div id="vendorFields">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div id="vendorFields" style="display: none;">
             <div class="form-floating">
                 <input asp-for="Input.CompanyName" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.CompanyName"></label>
                 <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
             </div>
             <br />
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <br />
-            <div>
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-            </div>
         </div>
 
+        <div class="form-floating">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+            <label asp-for="Input.Email"></label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="form-floating">
+            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+            <label asp-for="Input.Password"></label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="form-floating">
+            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+            <label asp-for="Input.ConfirmPassword"></label>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
+        <br />
+        <div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </div>
     </form>
+    
     <script src="~/js/register.js"></script>
     </div>
 

@@ -22,6 +22,13 @@ using Softuni_Fest;
 
 namespace Softuni_Fest.Areas.Identity.Pages.Account
 {
+    public enum Role
+    {
+        Client = 0,
+        Business
+
+    }
+
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -44,6 +51,7 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            Input = new InputModel();
         }
 
         /// <summary>
@@ -71,7 +79,6 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-          
             [StringLength(100)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
@@ -114,7 +121,6 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Display(Name = "Role")]
             public string Role { get; set; }
         }
 
@@ -135,9 +141,7 @@ namespace Softuni_Fest.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
-                // TODO: add role
-                //await _userManager.AddToRoleAsync(user, Input.Role);
+                await _userManager.AddToRoleAsync(user, Input.Role);
 
                 if (result.Succeeded)
                 {

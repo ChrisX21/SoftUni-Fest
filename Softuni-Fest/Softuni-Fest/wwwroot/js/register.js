@@ -1,16 +1,16 @@
 ﻿document.getElementById('userRole').addEventListener('click', () =>
 {
 	const selectValue = document.getElementById('userRole').value;
-	const clientRegisterForm = document.getElementById("registerFormClient");
-	const vendorRegisterForm = document.getElementById("registerFormVendor");
+	const clientFields = document.getElementById("clientFields");
+	const vendorFields = document.getElementById("vendorFields");
 
 	if (selectValue == 'Client') {
-		clientRegisterForm.style.display = 'block';
-		vendorRegisterForm.style.display = 'none';
+		clientFields.style.display = 'block';
+		vendorFields.style.display = 'none';
 	}
 	else
 	{
-		clientRegisterForm.style.display = 'none';
-		vendorRegisterForm.style.display = 'block';
+		clientFields.style.display = 'none';
+		vendorFields.style.display = 'block';
 	}
 });
