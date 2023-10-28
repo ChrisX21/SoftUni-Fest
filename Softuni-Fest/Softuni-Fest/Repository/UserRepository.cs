@@ -31,9 +31,10 @@ namespace Softuni_Fest.Repository
             }
 
             List<User> sortedUsers = userSimilarity.OrderBy(x => x.Value)
-                                                  .Select(x => x.Key)
-                                                  .Take(3)
-                                                  .ToList();
+                .Select(x => x.Key)
+                .Take(3)
+                .ToList();
+
             return sortedUsers;
         }
 
