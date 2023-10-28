@@ -3,6 +3,18 @@
 
 <form method="post" asp-route-productId="@Model.Product.Id" style="width:600px; margin-left:30%">
     <div class="border p-3 mt-4">
+        <div>
+            name
+        </div>
+        <br />
+        <div>
+            description
+        </div>
+        <br />
+        <div>
+            price
+        </div>
+        <br />
         <div class="form-floating">
             <input asp-for="Input.Quantity" class="form-control" aria-required="true" value="1" min="1" />
             <label asp-for="Input.Quantity"></label>
