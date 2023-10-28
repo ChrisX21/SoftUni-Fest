@@ -52,6 +52,15 @@
             <div>
                 <button id="loginSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
             </div>
+            <hr />
+            <div>
+                <div class="checkbox">
+                    <label asp-for="Input.RememberMe" class="form-label">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
+            </div>
         </div>
 
         <div id="vendorFields" style="display: none">
@@ -76,6 +85,15 @@
             <br />
             <div>
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            </div>
+            <hr />
+            <div>
+                <div class="checkbox">
+                    <label asp-for="Input.RememberMe" class="form-label">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
             </div>
         </div>
         <script>

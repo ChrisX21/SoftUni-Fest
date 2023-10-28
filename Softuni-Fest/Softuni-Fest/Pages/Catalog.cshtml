@@ -16,7 +16,7 @@
 
     </div>
     <br /> <br />
-    <table class="table table-bordered table-striped" style="width=100%">
+    <table class="table table-bordered table-striped" style="">
         <thead>
             <tr>
                 <th>Name</th>
@@ -26,26 +26,18 @@
         </thead>
         <tbody>
             <tr>
+                @foreach(var product in Model.Products)
+                {
                 <td width="30%">
-                    jesus
+                    @product.ProductName;
                 </td>
                 <td width="40%">
-                    CUM FROM MARS
+                    @product.ProductDescription;
                 </td>
                 <td width="10%">
-                    EDIN I PIDISE
+                    @product.ProductPrice;
                 </td>
-            </tr>
-            <tr>
-                <td width="30%">
-                    Tomaa
-                </td>
-                <td width="40%">
-                    seks igrachka
-                </td>
-                <td width="15%">
-                    EDIN I PIDISE
-                </td>
+                }
             </tr>
         </tbody>
     </table>

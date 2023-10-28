@@ -8,19 +8,19 @@
                 <hr style="width: 600px"/>
             </div>
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text"/>
+                <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductName" />
                 <label class="form-label">Name</label>
                 
             </div>
             <br/>
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text"/>
+                <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductDescription"/>
                 <label class="form-label">Description</label>
 
             </div>
             <br/>
             <div class="form-floating">
-                <input class="form-control" aria-required="true" type="text" />
+                <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductPrice"/>
                 <label class="form-label">Price</label>
 
             </div>
