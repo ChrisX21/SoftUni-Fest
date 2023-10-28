@@ -13,8 +13,9 @@ namespace Softuni_Fest
         {
             ApplicationDbContext context = new ApplicationDbContext();
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            // Add services to the container.
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -22,7 +23,6 @@ namespace Softuni_Fest
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddTransient<SeedData>();
             builder.Services.AddHostedService<SeederService>();

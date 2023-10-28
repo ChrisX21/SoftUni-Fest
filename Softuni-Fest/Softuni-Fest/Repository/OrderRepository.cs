@@ -22,7 +22,7 @@ namespace Softuni_Fest.Repository
             return await _Context.Orders.FindAsync(id);
         }
 
-        public async Task<string?> CreateOrderAsync(string userId) 
+        public async Task<Order?> CreateOrderAsync(string userId) 
         {
             Order order = new()
             {
@@ -33,7 +33,14 @@ namespace Softuni_Fest.Repository
             if (!await SaveAsync())
                 return null;
 
-            return order.Id;
+            return order;
+        }
+
+        public async Task<Order?> GetOrCreateOrderForUserAsync(string userId)
+        {
+            return 
+                await GetOrderForUserAsync(userId) ??
+                await CreateOrderAsync(userId);
         }
 
         public async Task<Order?> GetOrderForUserAsync(string userId) 

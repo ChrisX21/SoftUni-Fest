@@ -2,7 +2,10 @@
 {
     public interface IOrderProductsRepository
     {
-        Task<string?> CreateOrderItemAsync(string orderId, string productId);
+        Task<OrderProduct?> GetOrCreateOrderItemAsync(string orderId, string productId);
+        Task<OrderProduct?> CreateOrderItemAsync(string orderId, string productId);
+        Task<OrderProduct?> GetOrderItemAsync(string orderId, string productId);
+
         Task<List<OrderProduct>> GetOrderItemsForOrderAsync(string orderId);
         Task<bool> AddOrderProductAsync(OrderProduct orderProduct);
         Task<bool> RemoveOrderProductAsync(OrderProduct orderProduct);

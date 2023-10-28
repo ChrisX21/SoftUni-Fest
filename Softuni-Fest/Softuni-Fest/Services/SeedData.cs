@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Softuni_Fest.Models;
 
 namespace Softuni_Fest
 {
@@ -18,7 +19,7 @@ namespace Softuni_Fest
 
 		public async Task SeedRolesAsync()
 		{
-			string[] roles = new string[] { "Business", "Client" };
+			string[] roles = new string[] { Roles.Business, Roles.Client };
 			foreach (string role in roles) 
 				await CreateRoleAsync(new IdentityRole(role));
 		}
@@ -35,7 +36,7 @@ namespace Softuni_Fest
             await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(businessUser, _BusinessEmail, CancellationToken.None);
 			businessUser.EmailConfirmed = true;
             var businessResult = await _UserManager.CreateAsync(businessUser, _Password);
-			await _UserManager.AddToRoleAsync(businessUser, "Business");
+			await _UserManager.AddToRoleAsync(businessUser, Roles.Business);
 
             // creat client user
             User clientUser = new();
@@ -44,7 +45,7 @@ namespace Softuni_Fest
             await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(clientUser, _ClientEmail, CancellationToken.None);
             clientUser.EmailConfirmed = true;
             var clentResult = await _UserManager.CreateAsync(clientUser, _Password);
-            await _UserManager.AddToRoleAsync(clientUser, "Client");
+            await _UserManager.AddToRoleAsync(clientUser, Roles.Client);
         }
 
         public async Task SeedProductsAsync()
