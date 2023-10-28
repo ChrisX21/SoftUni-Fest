@@ -2,9 +2,9 @@
 @using Softuni_Fest;
 @model Softuni_Fest.Pages.OrdersModel
 @{
-    ViewData["Title"] = "Orders";
+    ViewData["Title"] = "Cart";
 }
-<h1 class="text-center">Orders</h1>
+<h1 class="text-center">Cart</h1>
 
 <div class="container p-3">
     @if (Model.OrderItems is not null)
@@ -42,7 +42,7 @@
         <div class="row pt-4">
             <div class="col-6">
                 <form id="checkoutForm" class="form-inline" asp-page="/">
-                    <button id="checkoutButton" type="submit" class="btn btn-primary">Buy</button>
+                    <button id="checkoutButton" type="submit" class="btn btn-primary" style="width:40%; margin-left: 82%">Buy</button>
                 </form>
             </div>
         </div>
