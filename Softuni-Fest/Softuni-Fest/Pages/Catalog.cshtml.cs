@@ -19,9 +19,21 @@ namespace Softuni_Fest.Pages
             _UserRepository = userRepository;
             _UserManager = userManager;
             Products = new List<Product>();
+            Users = new List<User>();
         }
         public async Task OnGet()
         {
+            await GetRecommendedUsers("test");
+            foreach (var item in Users)
+            {
+                Console.WriteLine(item.Email);
+            }
+
+            await GetRecommendedProducts();
+            foreach (var item in Products)
+            {
+                Console.WriteLine(item.ProductName);
+            }
             if (User.IsInRole("Business"))
             {
                 Products = await GetAllProductsForBusiness();
@@ -32,6 +44,7 @@ namespace Softuni_Fest.Pages
             }
         }
         public List<Product> Products { get; private set; } = null!;
+        public List<User> Users { get; private set; } = null!;
 
         public async Task<List<Product>> GetAllProductsForBusiness()
         {
@@ -45,6 +58,20 @@ namespace Softuni_Fest.Pages
             List<Product> products = (await _ProductRepository.GetProductsAsync()).ToList();
 
             return products;
+        }
+
+        public async Task GetRecommendedUsers(string username)
+        {
+            Users = (await _UserRepository.GetRecommendedUser(username)).ToList();
+        }
+        public async Task GetRecommendedProducts()
+        {
+            Products = new List<Product>();
+            foreach (User user in Users)
+            {
+                List<Product> productsForVendor = (await _ProductRepository.GetProductsAsyncForVendorId(user.Id)).ToList();
+                Products.AddRange(productsForVendor);
+            }
         }
     }
 }
