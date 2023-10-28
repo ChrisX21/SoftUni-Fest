@@ -38,9 +38,9 @@ namespace Softuni_Fest.Pages
 
             if (!await _ProductRepository.AddProductAsync(Product))
             {
-                return Redirect("/Index");
+                return RedirectToPage("/Catalog");
             }
-            return Page();
+            return RedirectToPage("/Catalog");
         }
         //[BindProperty]
         public string _ProductId { get; set; }
@@ -48,9 +48,9 @@ namespace Softuni_Fest.Pages
         {
             if(!await _ProductRepository.RemoveProductAsync(Product))
             {
-                return Redirect("/Index");
+                return RedirectToPage("/Catalog");
             }
-            return Page();
+            return RedirectToPage("/Catalog");
         }
         public async Task<IActionResult> OnUpdate()
         {
@@ -58,9 +58,9 @@ namespace Softuni_Fest.Pages
             //product = Product;
             //if (!await _ProductRepository.UpdateProductAsync(product))
             //{
-            //    return Redirect("/Index");
+            //    return RedirectToPage("/Catalog");
             //}
-            return Page();
+            return RedirectToPage("/Catalog");
         }
     }
 }

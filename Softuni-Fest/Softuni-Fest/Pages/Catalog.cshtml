@@ -13,15 +13,16 @@
         <div class="col-6">
             <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
         </div>
-
     </div>
+
     <br /> <br />
     <table class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Price</th>
+                <th style="text-align: center;">Price</th>
+                <th style="text-align: center;">Options</th>
             </tr>
         </thead>
         <tbody>
@@ -34,8 +35,11 @@
                     <td width="40%">
                         @product.ProductDescription
                     </td>
-                    <td width="10%">
+                    <td width="15%" style="text-align: center;">
                         @product.ProductPrice
+                    </td>
+                    <td width="20%" style="text-align: center;">
+                        <a asp-action="Delete" class="btn btn-danger">Delete</a>
                     </td>
                 }
             </tr>

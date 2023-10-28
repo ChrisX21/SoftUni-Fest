@@ -15,7 +15,7 @@
     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" style="margin-top: 20px; display: block">
         <select asp-for="Input.Role" class="form-control" id="userRole" aria-required="true">
             <option value="Client">Client</option>
-            <option value="Vendor">Vendor</option>
+            <option value="Business">Vendor</option>
         </select>
         <span asp-validation-for="Input.Role" class="text-danger"></span>
         <br />
