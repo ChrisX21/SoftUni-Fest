@@ -1,9 +1,12 @@
 ﻿@page
 @using Softuni_Fest;
+@using System.Globalization
 @model Softuni_Fest.Pages.OrdersModel
 @{
     ViewData["Title"] = "Orders";
+    CultureInfo bgCulture = new CultureInfo("en-BG");
 }
+
 <h1 class="text-center">Orders</h1>
 
 <div class="container p-3">
@@ -18,37 +21,34 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in Model.OrderItems)
-                {
-                    Product? product = await Model.GetProduct(item.ProductId);
-                    if (product is null)
-                        continue;
+                <form id="checkoutForm" class="form-inline" asp-page="/">
+                    @for(int i = 0; i < Model.OrderItems.Count; i++)
+                    {
+                        Product? product = await Model.GetProduct(Model.OrderItems[i].ProductId);
+                        if (product is null)
+                            continue;
 
-                    <tr>
-                        <td id="productName" width="30%">
-                            @product.ProductName
-                        </td>
-                        <td id="productPrice" width="10%">
-                            @product.ProductPrice
-                        </td>
-                        <td id="productQuantity" width="10%">
-                            @item.Quantity
-                        </td>
-                    </tr>
-                }
+                        <tr>
+                            <td id="productName" width="30%">
+                                @product.ProductName
+                            </td>
+                            <td id="productPrice" width="10%">
+                                @((product.ProductPrice / 100m).ToString("C2", bgCulture))
+                            </td>
+                            <td id="productQuantity" width="10%">
+                                <input asp-for="Quantities[i]" class="form-control"/>
+                            </td>
+                        </tr>
+                    }
+                    <a id="checkoutButton" onclick="checkout()" class="btn btn-primary">Buy</a>
+                </form>
             </tbody>
         </table>
 
-        <div class="row pt-4">
-            <div class="col-6">
-                <form id="checkoutForm" class="form-inline" asp-page="/">
-                    <button id="checkoutButton" type="submit" class="btn btn-primary">Buy</button>
-                </form>
-            </div>
-        </div>
     }
     else
     {
         <h1>No products in cart</h1>
     }
+    <script src="~/js/order.js"></script>
 </div>

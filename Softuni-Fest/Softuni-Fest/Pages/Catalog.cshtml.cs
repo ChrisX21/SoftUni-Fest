@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Softuni_Fest.Pages
 {
@@ -71,6 +72,7 @@ namespace Softuni_Fest.Pages
 
             orderProduct.Quantity += ProductQuantity;
             await _OrderProductRepository.SaveAsync();
+            ProductQuantity = 1;
         }
 
         public List<Product> Products { get; set; } = null!;
@@ -87,8 +89,10 @@ namespace Softuni_Fest.Pages
             return products;
         }
 
-        [BindProperty]
         // the user selected quantity of the product
+        [BindProperty]
+        [Range(1, 20, ErrorMessage = "{0} should be between {1} and {2}")]
+        [Display(Name = "Quantity")]
         public int ProductQuantity { get; set; } = 1;
 
 
