@@ -64,5 +64,20 @@ namespace Softuni_Fest.Repository
             _Context.Update(product);
             return await SaveAsync();
         }
+
+        Task<ICollection<Order>> IProductRepository.GetProductsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ICollection<Order>> IProductRepository.GetProductsAsyncForOrderId(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ICollection<Order>> IProductRepository.GetProductsAsyncForVendorId(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

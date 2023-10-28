@@ -19,6 +19,13 @@ namespace Softuni_Fest.Pages
         }
         public void OnGet()
         {
+
+        }
+        public async Task<IActionResult> OnPost(Product product)
+        {
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+            return RedirectToPage("Catalog");
         }
         [BindProperty]
         public Product Product { get; set; }

@@ -8,7 +8,7 @@ namespace Softuni_Fest.Pages
 {
     [Authorize(Roles = "Business, Client")]
     public class CatalogModel : PageModel
-    {
+    
         private readonly IProductRepository _ProductRepository;
         private readonly IUserRepository _UserRepository;
         private readonly UserManager<User> _UserManager;
@@ -23,6 +23,7 @@ namespace Softuni_Fest.Pages
         }
         public async Task OnGet()
         {
+            Products = _context.Products;
             if (User.IsInRole("Business"))
             {
                 Products = await GetAllProductsForBusiness();

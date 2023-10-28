@@ -4,10 +4,11 @@
     <form method="post" style="width:600px; margin-left:30%">
         <div class="border p-3 mt-4">
             <div class="row pb-2">
-                <h2 class="text-primary pl-3">Create product</h2>
+                <h2 class="text-primary pl-3" style="font-size:250%">Create product</h2>
+                <hr style="width: 600px"/>
             </div>
             <div class="form-floating">
-                <input class="form-control" asp-for="Product.ProductName" aria-required="true" type="text" />
+                <input class="form-control" aria-required="true" type="text" asp-for="@Model.product.ProductName" />
                 <label class="form-label">Name</label>
             </div>
             <br />
