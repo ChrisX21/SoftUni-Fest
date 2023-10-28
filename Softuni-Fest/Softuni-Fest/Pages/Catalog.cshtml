@@ -51,6 +51,7 @@
                         <form id="addItemForm" method="post" asp-page-handler="AddItemToCart" asp-route-productId="@product.Id">
                             <td width="10%" style="text-align:center;"><input asp-for="@Model.ProductQuantity" /></td>
                             <td style="text-align:center"><a href="#" onclick="addItemToCart()" class="btn btn-danger" style="text-align:center">Buy</a></td>
+
                         </form>
                     }
                     else
