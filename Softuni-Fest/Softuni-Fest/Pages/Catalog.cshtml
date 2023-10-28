@@ -26,16 +26,10 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Description</th>
                 <th style="text-align: center;">Price</th>
-                @if (User.IsInRole(Roles.Client))
+                @if (User.IsInRole(Roles.Business))
                 {
-                    <th style="text-align:center">Quantity</th>
-                    <th style="text-align:center">Options</th>
-                }
-                else
-                {
-                    <th style="text-align: center;">Options</th>
+                    <th style="text-align: center">Options</th>
                 }
             </tr>
         </thead>
@@ -43,18 +37,11 @@
             @foreach(var product in await Model.GetProductsForCurrentUser())
             {
                 <tr>
-                    <td width="20%">@product.ProductName</td>
-                    <td width="30%">@(product.ProductDescription ?? "None")</td>
-                    <td width="10%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
-                    @if (User.IsInRole(Roles.Client))
-                    {
-                        <form id="addItemForm" method="post" asp-page-handler="AddItemToCart" asp-route-productId="@product.Id">
-                            <td width="10%" style="text-align:center;"><input asp-for="@Model.ProductQuantity" /></td>
-                            <td style="text-align:center"><a href="#" onclick="addItemToCart()" class="btn btn-danger" style="text-align:center">Buy</a></td>
-
-                        </form>
-                    }
-                    else if(User.IsInRole(Roles.Business))
+                    <td width="20%">
+                        <a class="nav-link" asp-page="/Product" asp-route-productId="@product.Id">@product.ProductName</a>
+                    </td>
+                    <td width="20%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
+                    @if(User.IsInRole(Roles.Business))
                     {
                         <form id="deleteItemForm" method="post" asp-page-handler="Delete">
                             <td width="20%" style="text-align: center;">

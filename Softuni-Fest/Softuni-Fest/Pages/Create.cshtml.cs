@@ -24,14 +24,7 @@ namespace Softuni_Fest.Pages
         {
 
         }
-        //public async Task<IActionResult> OnPost(Product product)
-        //{
-        //    //await _context.Products.AddAsync(product);
-        //    //await _context.SaveChangesAsync();
-        //    return RedirectToPage("Catalog");
-        //}
-
-
+        
         [BindProperty]
         public ProductInputModel Input { get; set; }
 
@@ -71,14 +64,9 @@ namespace Softuni_Fest.Pages
 
             return RedirectToPage("/Catalog");
         }
-        //[BindProperty]
-        //public string _ProductId { get; set; }
+
         public async Task<IActionResult> OnDelete()
         {
-            //if(!await _ProductRepository.RemoveProductAsync(Product))
-            //{
-            //    return RedirectToPage("/Catalog");
-            //}
             return RedirectToPage("/Catalog");
         }
     }

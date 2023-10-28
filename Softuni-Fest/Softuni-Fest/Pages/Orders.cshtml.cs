@@ -49,7 +49,7 @@ namespace Softuni_Fest.Pages
             }
         }
 
-        public async Task<ActionResult> OnPost() 
+        public async Task<ActionResult> OnPost()
         {
             OrderItems = await GetOrderItemsForCurrentUser();
             if (OrderItems is null || Order is null)

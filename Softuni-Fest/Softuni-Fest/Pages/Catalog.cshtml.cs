@@ -11,14 +11,10 @@ namespace Softuni_Fest.Pages
     public class CatalogModel : PageModel
     {
         public CatalogModel(IProductRepository productRepository,
-                            IOrderRepository orderRepository,
-                            IOrderProductsRepository orderProductsRepository,
                             UserManager<User> userManager,
                             ILogger<CatalogModel> logger)
         {
             _ProductRepository = productRepository;
-            _OrderRepository = orderRepository;
-            _OrderProductRepository = orderProductsRepository;
             _UserManager = userManager;
             _Logger = logger;
             Products = new List<Product>();
@@ -40,39 +36,6 @@ namespace Softuni_Fest.Pages
                 return await GetAllProductsForBusiness();
 
             return await GetAllProductsForClient();
-        }
-
-        public async Task OnPostAddItemToCart(string productId)
-        {
-            string userId = _UserManager.GetUserId(User);
-            Order? order = await _OrderRepository.GetOrCreateOrderForUserAsync(userId);
-                
-            if(order is null)
-            {
-                _Logger.LogError("Couldn't retrieve or create order");
-                return;
-            }
-
-            Product? product = await _ProductRepository.GetProductByIdAsync(productId);
-            if(product is null)
-            {
-                _Logger.LogError("Invalid product id");
-                return;
-            }
-
-            OrderProduct? orderProduct = 
-                    await _OrderProductRepository.
-                            GetOrCreateOrderItemAsync(order.Id, product.Id);
-
-            if (orderProduct is null) 
-            {
-                _Logger.LogError("Couldn't retrieve or create cart item");
-                return;
-            }
-
-            orderProduct.Quantity += ProductQuantity;
-            await _OrderProductRepository.SaveAsync();
-            ProductQuantity = 1;
         }
 
         public List<Product> Products { get; set; } = null!;
@@ -97,8 +60,6 @@ namespace Softuni_Fest.Pages
 
 
         private readonly IProductRepository _ProductRepository;
-        private readonly IOrderRepository _OrderRepository;
-        private readonly IOrderProductsRepository _OrderProductRepository;
         private readonly UserManager<User> _UserManager;
         private readonly ILogger<CatalogModel> _Logger;
     }
