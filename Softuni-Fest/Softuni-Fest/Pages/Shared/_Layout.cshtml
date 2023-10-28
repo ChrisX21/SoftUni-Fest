@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Softuni_Fest.Models
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,7 +25,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Catalog">Catalog</a>
                         </li>
-                        @if (User.IsInRole("Client"))
+                        @if (User.IsInRole(Roles.Client))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Orders">Orders</a>

@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Softuni_Fest.Interfaces;
+using Softuni_Fest.Models;
 using Softuni_Fest.Services;
 using Stripe.Checkout;
 
 namespace Softuni_Fest.Pages
 {
-    [Authorize(Roles = "Client")]
+    [Authorize(Roles = Roles.Client)]
     public class OrdersModel : PageModel
     {
         public OrdersModel(IOrderRepository orderRepository,

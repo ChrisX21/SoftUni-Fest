@@ -1,16 +1,28 @@
-﻿document.getElementById('userRole').addEventListener('click', () =>
+﻿function setup() 
 {
-	const selectValue = document.getElementById('userRole').value;
+	const userRoleSelect = document.getElementById('userRole');
 	const clientFields = document.getElementById("clientFields");
 	const vendorFields = document.getElementById("vendorFields");
 
-	if (selectValue == 'Client') {
-		clientFields.style.display = 'block';
-		vendorFields.style.display = 'none';
-	}
-	else
+	function showCorrectFormFields(value)
 	{
-		clientFields.style.display = 'none';
-		vendorFields.style.display = 'block';
+		if (value == 'Client') {
+			clientFields.style.display = 'block';
+			vendorFields.style.display = 'none';
+		}
+		else
+		{
+			clientFields.style.display = 'none';
+			vendorFields.style.display = 'block';
+		}
 	}
-});
+
+	showCorrectFormFields(userRoleSelect.value);
+	
+	userRoleSelect.addEventListener('click', () =>
+	{
+		showCorrectFormFields(userRoleSelect.value);
+	});
+}
+
+setup();
