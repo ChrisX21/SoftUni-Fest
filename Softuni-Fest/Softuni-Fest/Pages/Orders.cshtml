@@ -48,19 +48,6 @@
             </table>
             <div class="row pt-4">
                 <div class="col-6">
-                    Price: @((Model.OrderItems.Sum((x) =>
-                    {
-                        Product? product = Model.GetProduct(x.ProductId);
-                        if (product is null)
-                            return 0;
-
-                        return product.ProductPrice * x.Quantity;
-                    }) / 100m).ToString("C2", bgCulture)
-                )
-                </div>
-            </div>
-            <div class="row pt-4">
-                <div class="col-6">
                     <a id="checkoutButton" onclick="checkout()" class="btn btn-primary" style="width:40%; margin-left: 82%">Buy</a>
                 </div>
             </div>
