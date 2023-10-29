@@ -30,6 +30,12 @@ namespace Softuni_Fest.Pages
             Products = await GetAllProductsForClient();
         }
 
+        public async Task<IActionResult> OnPostDelete(string productId)
+        {
+            await _ProductRepository.RemoveProductAsync(productId);
+            return RedirectToPage("/Catalog");
+        }
+
         public async Task<List<Product>> GetProductsForCurrentUser()
         {
             if (User.IsInRole(Roles.Business))

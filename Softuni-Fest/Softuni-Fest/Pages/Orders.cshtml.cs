@@ -77,9 +77,20 @@ namespace Softuni_Fest.Pages
             return Redirect(session.Url);
         }
 
-        public async Task<Product?> GetProduct(string productId) 
+        public async Task<ActionResult> OnPostRemoveItem(string orderItemId) 
+        {
+            await _OrderItemRepository.RemoveOrderAsync(orderItemId);
+            return Redirect("/Orders");
+        }
+
+        public async Task<Product?> GetProductAsync(string productId) 
         {
             return await _ProductRepository.GetProductByIdAsync(productId);
+        }
+
+        public Product? GetProduct(string productId) 
+        {
+            return _ProductRepository.GetProductById(productId);
         }
 
         public async Task<List<OrderProduct>?> GetOrderItemsForUser(string userId) 

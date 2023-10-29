@@ -64,10 +64,5 @@ namespace Softuni_Fest.Pages
 
             return RedirectToPage("/Catalog");
         }
-
-        public async Task<IActionResult> OnDelete()
-        {
-            return RedirectToPage("/Catalog");
-        }
     }
 }

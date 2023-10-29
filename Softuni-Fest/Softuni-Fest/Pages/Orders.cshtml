@@ -3,14 +3,14 @@
 @using System.Globalization
 @model Softuni_Fest.Pages.OrdersModel
 @{
-    ViewData["Title"] = "Orders";
     CultureInfo bgCulture = new CultureInfo("en-BG");
     ViewData["Title"] = "Cart";
+
 }
 <h1 class="text-center">Cart</h1>
 
 <div class="container p-3">
-    @if (Model.OrderItems is not null)
+    @if (Model.OrderItems is not null && Model.OrderItems.Count > 0)
     {
         <form id="checkoutForm" class="form-inline" asp-page="/">
             <table class="table table-bordered table-striped" style="width: 100%">
@@ -19,29 +19,46 @@
                         <th>Name</th>
                         <th>Price</th>
                         <th>Quantity</th>
+                        <th>Option</th>
                     </tr>
                 </thead>
                 <tbody>
-                        @for(int i = 0; i < Model.OrderItems.Count; i++)
-                        {
-                            Product? product = await Model.GetProduct(Model.OrderItems[i].ProductId);
-                            if (product is null)
-                                continue;
+                    @for(int i = 0; i < Model.OrderItems.Count; i++)
+                    {
+                        Product? product = await Model.GetProductAsync(Model.OrderItems[i].ProductId);
+                        if (product is null)
+                            continue;
 
-                            <tr>
-                                <td id="productName" width="30%">
-                                    @product.ProductName
-                                </td>
-                                <td id="productPrice" width="10%">
-                                    @((product.ProductPrice / 100m).ToString("C2", bgCulture))
-                                </td>
-                                <td id="productQuantity" width="10%">
-                                    <input asp-for="Quantities[i]" class="form-control"/>
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td id="productName" width="30%">
+                                @product.ProductName
+                            </td>
+                            <td id="productPrice" width="10%">
+                                @((product.ProductPrice / 100m).ToString("C2", bgCulture))
+                            </td>
+                            <td id="productQuantity" width="10%">
+                                <input asp-for="Quantities[i]" class="form-control"/>
+                            </td>
+                            <td>
+                                <button asp-page-handler="RemoveItem" asp-route-orderItemId="@Model.OrderItems[i].Id" type="submit" class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+            <div class="row pt-4">
+                <div class="col-6">
+                    Price: @((Model.OrderItems.Sum((x) =>
+                    {
+                        Product? product = Model.GetProduct(x.ProductId);
+                        if (product is null)
+                            return 0;
+
+                        return product.ProductPrice * x.Quantity;
+                    }) / 100m).ToString("C2", bgCulture)
+                )
+                </div>
+            </div>
             <div class="row pt-4">
                 <div class="col-6">
                     <a id="checkoutButton" onclick="checkout()" class="btn btn-primary" style="width:40%; margin-left: 82%">Buy</a>

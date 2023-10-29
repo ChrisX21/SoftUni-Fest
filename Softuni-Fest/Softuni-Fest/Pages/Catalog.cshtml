@@ -25,8 +25,8 @@
     <table class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr>
-                <th>Name</th>
-                <th style="text-align: center;">Price</th>
+                <th style="text-align: center">Name</th>
+                <th style="text-align: center">Price</th>
                 @if (User.IsInRole(Roles.Business))
                 {
                     <th style="text-align: center">Options</th>
@@ -38,14 +38,21 @@
             {
                 <tr>
                     <td width="20%">
-                        <a class="nav-link" asp-page="/Product" asp-route-productId="@product.Id">@product.ProductName</a>
+                        @if (User.IsInRole(Roles.Business))
+                        {
+                            <a class="nav-link">@product.ProductName</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" asp-page="/Product" asp-route-productId="@product.Id">@product.ProductName</a>
+                        }
                     </td>
                     <td width="20%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
                     @if(User.IsInRole(Roles.Business))
                     {
-                        <form id="deleteItemForm" method="post" asp-page-handler="Delete">
+                        <form id="deleteItemForm" method="post" asp-page-handler="Delete" asp-route-productId="@product.Id">
                             <td width="20%" style="text-align: center;">
-                              <a href="#" onclick="deleteItem()" class="btn btn-danger">Delete</a>
+                              <button type="submit" class="btn btn-danger">Delete</button>
                             </td>
                         </form>
                     }

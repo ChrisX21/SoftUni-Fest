@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Softuni_Fest.Interfaces;
+using Softuni_Fest.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Softuni_Fest.Pages
@@ -28,6 +29,8 @@ namespace Softuni_Fest.Pages
 
         public async Task<IActionResult> OnPost(string productId) 
         {
+            if (!User.IsInRole(Roles.Client))
+                return Redirect("/Identity/Account/Login");
             string userId = _UserManager.GetUserId(User);
             Order? order = await _OrderRepository.GetOrCreateOrderForUserAsync(userId);
 
