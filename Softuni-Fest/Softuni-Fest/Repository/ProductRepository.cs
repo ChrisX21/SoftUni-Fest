@@ -46,6 +46,21 @@ namespace Softuni_Fest.Repository
             return await _Context.Products.AnyAsync(x => x.Id == id);
         }
 
+        public Product? GetProductById(string id) 
+        {
+            return _Context.Products.FirstOrDefault(x => x.Id == id);
+        }
+
+        public async Task<bool> RemoveProductAsync(string id) 
+        {
+            Product? product = await GetProductByIdAsync(id);
+            if (product is null)
+                return false;
+
+            _Context.Products.Remove(product);
+            return await SaveAsync();
+        }
+
         public async Task<bool> RemoveProductAsync(Product product)
         {
             _Context.Remove(product);

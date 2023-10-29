@@ -24,16 +24,9 @@ namespace Softuni_Fest.Pages
         {
 
         }
-        //public async Task<IActionResult> OnPost(Product product)
-        //{
-        //    //await _context.Products.AddAsync(product);
-        //    //await _context.SaveChangesAsync();
-        //    return RedirectToPage("Catalog");
-        //}
-
-
+        
         [BindProperty]
-        public Product Product { get; set; }
+        public ProductInputModel Input { get; set; }
 
         public class ProductInputModel 
         {
@@ -46,15 +39,11 @@ namespace Softuni_Fest.Pages
             [Display(Name = "Description")]
             public string? ProductDescription { get; set; }
 
-
             [Required]
+            [Range(0.01, 1000000.0, ErrorMessage = "The {0} should be between {1} and {2}")]
             [DataType(DataType.Currency)]
             [Display(Name = "Price")]
-            public long Price { get; set; }
-
-            [Required]
-            [Display(Name = "Quantity In Stock")]
-            public int QuantityInStock { get; set; }
+            public double Price { get; set; }
         }
 
 
@@ -62,32 +51,18 @@ namespace Softuni_Fest.Pages
         {
             string userId = _UserManager.GetUserId(User);
 
-            Product.VendorId = userId;
+            Product product = new()
+            {
+                ProductName = Input.ProductName,
+                ProductDescription = Input.ProductDescription,
+                ProductPrice = (long)(Input.Price * 100d),
+                VendorId = userId
+            };
 
-            if (!await _ProductRepository.AddProductAsync(Product))
+            if (!await _ProductRepository.AddProductAsync(product))
                 return RedirectToPage("/Catalog");
 
             return RedirectToPage("/Catalog");
-        }
-        //[BindProperty]
-        //public string _ProductId { get; set; }
-        public async Task<IActionResult> OnDelete()
-        {
-            if(!await _ProductRepository.RemoveProductAsync(Product))
-            {
-                return Redirect("/Index");
-            }
-            return Page();
-        }
-        public async Task<IActionResult> OnUpdate()
-        {
-            //Product product = await _ProductRepository.GetProductAsync(_ProductId);
-            //product = Product;
-            //if (!await _ProductRepository.UpdateProductAsync(product))
-            //{
-            //    return Redirect("/Index");
-            //}
-            return Page();
         }
     }
 }

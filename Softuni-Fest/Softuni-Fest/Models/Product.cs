@@ -13,7 +13,7 @@ namespace Softuni_Fest
 
         public string Id { get; set; } = null!;
         public string ProductName { get; set; } = null!;
-        public string ProductDescription { get; set; } = null!;
+        public string? ProductDescription { get; set; } = null;
         public long ProductPrice { get; set; }
         public string VendorId { get; set; } = null!;
         public int QuantityInStock { get; set; }

@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Models;
 using Softuni_Fest.Services;
 using Stripe.Checkout;
+using System.ComponentModel.DataAnnotations;
 
 namespace Softuni_Fest.Pages
 {
@@ -34,21 +34,29 @@ namespace Softuni_Fest.Pages
 
             _UserManager = userManager;
             _Logger = logger;
-            //OrderItems = new List<OrderProduct>();
-
         }
 
         public async Task OnGet()
         {
             OrderItems = await GetOrderItemsForCurrentUser();
+            if (OrderItems is null)
+                return;
+
+            Quantities = new long[OrderItems.Count];
+            for (int i = 0; i < OrderItems.Count; i++) 
+            {
+                Quantities[i] = OrderItems[i].Quantity;
+            }
         }
 
-        public async Task<ActionResult> OnPost() 
+        public async Task<ActionResult> OnPost()
         {
             OrderItems = await GetOrderItemsForCurrentUser();
             if (OrderItems is null || Order is null)
                 return Page();
 
+            for (int i = 0; i < Quantities.Length; i++)
+                OrderItems[i].Quantity = Quantities[i];
 
             _Logger.LogInformation("Checking out");
             Session? session = await _StripeService.Checkout(OrderItems);
@@ -69,9 +77,20 @@ namespace Softuni_Fest.Pages
             return Redirect(session.Url);
         }
 
-        public async Task<Product?> GetProduct(string productId) 
+        public async Task<ActionResult> OnPostRemoveItem(string orderItemId) 
+        {
+            await _OrderItemRepository.RemoveOrderAsync(orderItemId);
+            return Redirect("/Orders");
+        }
+
+        public async Task<Product?> GetProductAsync(string productId) 
         {
             return await _ProductRepository.GetProductByIdAsync(productId);
+        }
+
+        public Product? GetProduct(string productId) 
+        {
+            return _ProductRepository.GetProductById(productId);
         }
 
         public async Task<List<OrderProduct>?> GetOrderItemsForUser(string userId) 
@@ -91,6 +110,11 @@ namespace Softuni_Fest.Pages
             string userId = _UserManager.GetUserId(User);
             return await GetOrderItemsForUser(userId);
         }
+
+        [BindProperty]
+        [Range(1, int.MaxValue, ErrorMessage = "The {0} should be between {1} {2}")]
+        [Display(Name = "Quantity")]
+        public long[] Quantities { get; set; }
 
         public List<OrderProduct>? OrderItems { get; set; } = null;
         public Order? Order { get; set; } = null;

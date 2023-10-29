@@ -16,7 +16,7 @@ namespace Softuni_Fest.Repository
             return await SaveAsync();
         }
 
-        public async Task<OrderProduct> GetOrderProductAsync(string id)
+        public async Task<OrderProduct?> GetOrderProductAsync(string id)
         {
             return await _Context.OrderProducts.FindAsync(id);
         }
@@ -40,6 +40,16 @@ namespace Softuni_Fest.Repository
             return
                 await GetOrderItemAsync(orderId, productId) ??
                 await CreateOrderItemAsync(orderId, productId);
+        }
+
+        public async Task<bool> RemoveOrderAsync(string orderItemId) 
+        {
+            OrderProduct? orderItem = await GetOrderProductAsync(orderItemId);
+            if (orderItem is null)
+                return false;
+
+            _Context.OrderProducts.Remove(orderItem);
+            return await SaveAsync();
         }
 
         public async Task<OrderProduct?> CreateOrderItemAsync(string orderId, string productId) 
