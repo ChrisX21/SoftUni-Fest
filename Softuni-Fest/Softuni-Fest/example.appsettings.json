@@ -13,12 +13,5 @@
 		"SecretKey": "SomeSecretKey",
 		"PublishableKey": "SomePublishableKey"
 	},
-	"Mail": {
-		"Sender": "example@gmail.com",
-		"Port": 587,
-		"Host": "example",
-		"Username": "example",
-		"Password": "example"
-	}
 	"AllowedHosts": "*"
 }
