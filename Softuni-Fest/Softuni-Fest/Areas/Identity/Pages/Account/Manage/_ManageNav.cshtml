@@ -4,9 +4,4 @@
 }
 <ul class="nav nav-pills flex-column">
     <li class="nav-item"><a class="btn btn-primary @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
-    @if (hasExternalLogins)
-    {
-        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
-    }
-    <li class="nav-item" style="margin-top:5px"><a class="btn btn-danger" asp-page="./DeletePersonalData">Delete your Account</a></li>
 </ul>
