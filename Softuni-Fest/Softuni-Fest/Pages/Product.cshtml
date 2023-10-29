@@ -1,0 +1,36 @@
+﻿@page
+@using System.Globalization
+@model Softuni_Fest.Pages.ProductModel
+@{
+    CultureInfo bgCulture = new CultureInfo("en-BG");
+}
+
+@if(Model.Product is not null)
+{
+    <form method="post" asp-route-productId="@Model.Product.Id" style="width:600px; margin-left:30%">
+        <div class="border p-3 mt-4">
+            <h2>@Model.Product.ProductName</h2>
+            <br>
+            Description
+            <div id="productDescrition" class="border p-3 mb-4">
+                <div>@(Model.Product.ProductDescription ?? "None")</div>
+            </div>
+            <div class="form-floating">Price: @((Model.Product.ProductPrice / 100m).ToString("C2", bgCulture))</div>
+            <br>
+            <div class="form-floating">
+                <input asp-for="Input.Quantity" class="form-control" aria-required="true" value="1" min="1" />
+                <label asp-for="Input.Quantity"></label>
+                <span asp-validation-for="Input.Quantity" class="text-danger"></span>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" style="width: 150px;">Buy</button>
+        </div>
+    </form>
+}
+else
+{
+    <span class="text-danger">The product is invalid!</span>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
