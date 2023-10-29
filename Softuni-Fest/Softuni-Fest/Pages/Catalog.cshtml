@@ -1,71 +1,64 @@
 ﻿@page
-@using Softuni_Fest.Models
-@using System.Globalization
 @model Softuni_Fest.Pages.CatalogModel
 @{
     ViewData["Title"] = "Catalog";
-    CultureInfo bgCulture = new CultureInfo("en-BG");
 }
-
+<form method="post" asp-page="/" class="d-flex">
+    <input class="form-control me-sm-2" type="search" asp-for="Term" placeholder="Search">
+    <button class="btn my-2 my-sm-0" type="submit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+            </button>
+            </form>
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary" style="font-size: 300%;">Products Catalog</h2>
-            <hr style="width:350px"/>
+            <h2 class="text-primary" style="font-size: 300%;">Product Catalog</h2>
         </div>
-        @if (User.IsInRole(Roles.Business))
+        <div class="col-6">
+            <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
+        </div>
+        @foreach(var item in Model.Products)
         {
-            <div class="col-6">
-                <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
-            </div>
+            <p>@item.ProductPrice</p>
+        }@foreach (var item in Model.Users)
+        {
+            <p>@item.UserName</p>
         }
     </div>
-
     <br /> <br />
-    <table class="table table-bordered table-striped" style="width: 100%">
+    <table class="table table-bordered table-striped" style="width=100%">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th style="text-align: center;">Price</th>
-                @if (User.IsInRole(Roles.Client))
-                {
-                    <th style="text-align:center">Quantity</th>
-                    <th style="text-align:center">Options</th>
-                }
-                else
-                {
-                    <th style="text-align: center;">Options</th>
-                }
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(var product in await Model.GetProductsForCurrentUser())
-            {
-                <tr>
-                    <td width="20%">@product.ProductName</td>
-                    <td width="30%">@product.ProductDescription</td>
-                    <td width="10%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
-                    @if (User.IsInRole(Roles.Client))
-                    {
-                        <form id="addItemForm" method="post" asp-page-handler="AddItemToCart" asp-route-productId="@product.Id">
-                            <td width="10%" style="text-align:center;"><input asp-for="@Model.ProductQuantity" /></td>
-                            <td style="text-align:center"><a href="#" onclick="addItemToCart()" class="btn btn-danger" style="text-align:center">Buy</a></td>
-
-                        </form>
-                    }
-                    else
-                    {
-                        <form id="deleteItemForm" method="post" asp-page-handler="Delete">
-                            <td width="20%" style="text-align: center;">
-                              <a href="#" onclick="deleteItem()" class="btn btn-danger">Delete</a>
-                            </td>
-                        </form>
-                    }
-                </tr>
-            }
+            <tr>
+                <td width="30%">
+                    jesus
+                </td>
+                <td width="40%">
+                    CUM FROM MARS
+                </td>
+                <td width="10%">
+                    EDIN I PIDISE
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">
+                    Tomaa
+                </td>
+                <td width="40%">
+                    seks igrachka
+                </td>
+                <td width="15%">
+                    EDIN I PIDISE
+                </td>
+            </tr>
         </tbody>
     </table>
-
-    <script src="~/js/catalog.js"></script>
 </div>

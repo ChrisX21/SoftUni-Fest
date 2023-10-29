@@ -34,19 +34,22 @@ namespace Softuni_Fest.Pages
             Users = new List<User>();
             _UserRepository = userRepository;
         }
-        public async Task OnGet()
+        [BindProperty]
+        public string Term { get; set; } = null!;
+        public async Task<IActionResult> OnPost()
         {
-            await GetRecommendedUsers("test");
-            foreach (var item in Users)
+            if (Term == null)
             {
-                Console.WriteLine(item.Email);
+                return RedirectToPage("/Catalog");
             }
 
+            await GetRecommendedUsers(Term);
             await GetRecommendedProducts();
-            foreach (var item in Products)
-            {
-                Console.WriteLine(item.ProductName);
-            }
+
+            return RedirectToPage("/Catalog");
+        }
+        public async Task OnGet()
+        {
             if (User.IsInRole(Roles.Business))
             {
                 Products = await GetAllProductsForBusiness();
