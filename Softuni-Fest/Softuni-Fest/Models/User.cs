@@ -7,5 +7,7 @@ namespace Softuni_Fest
         public User()
         {
         }
+
+        public string? NamePersonal { get; set; }
     }
 }

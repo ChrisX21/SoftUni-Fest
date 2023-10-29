@@ -12,12 +12,14 @@ namespace Softuni_Fest.Pages
         public CatalogModel(IProductRepository productRepository,
                             UserManager<User> userManager,
                             ILogger<CatalogModel> logger,
-                            IUserRepository userRepository)
+                            IUserRepository userRepository,
+                            RoleManager<IdentityRole> roleManager)
         {
             _ProductRepository = productRepository;
             _UserManager = userManager;
             _UserRepository = userRepository;
             _Logger = logger;
+            _RoleManager = roleManager;
             Products = new List<Product>();
             Users = new List<User>();
         }
@@ -95,5 +97,6 @@ namespace Softuni_Fest.Pages
         private readonly UserManager<User> _UserManager;
         private readonly IUserRepository _UserRepository;
         private readonly ILogger<CatalogModel> _Logger;
+        private readonly RoleManager<IdentityRole> _RoleManager;
     }
 }

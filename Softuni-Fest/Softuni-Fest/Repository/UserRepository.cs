@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Softuni_Fest.Interfaces;
+using Softuni_Fest.Models;
 
 namespace Softuni_Fest.Repository
 {
@@ -102,9 +105,9 @@ namespace Softuni_Fest.Repository
             return await _Context.Users.AnyAsync(x => x.Id == id);
         }
 
-        public async Task<List<User>> GetUsersFromSearchTerm(string searchTerm) 
+        public async Task<List<User>> GetUsersFromSearchTerm(string searchTerm)
         {
-            return await _Context.Users.Where(x => x.NormalizedUserName.Contains(searchTerm.ToUpper())).ToListAsync();
+            return await _Context.Users.Where((x) => x.NamePersonal.ToLower().Contains(searchTerm.ToLower())).ToListAsync();
         }
     }
 }
