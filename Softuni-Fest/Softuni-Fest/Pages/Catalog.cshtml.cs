@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace Softuni_Fest.Pages
 {
@@ -12,13 +11,19 @@ namespace Softuni_Fest.Pages
     {
         public CatalogModel(IProductRepository productRepository,
                             UserManager<User> userManager,
-                            ILogger<CatalogModel> logger)
+                            ILogger<CatalogModel> logger,
+                            IUserRepository userRepository,
+                            RoleManager<IdentityRole> roleManager)
         {
             _ProductRepository = productRepository;
             _UserManager = userManager;
+            _UserRepository = userRepository;
             _Logger = logger;
+            _RoleManager = roleManager;
             Products = new List<Product>();
+            Users = new List<User>();
         }
+
         public async Task OnGet()
         {
             if (User.IsInRole(Roles.Business))
@@ -27,8 +32,17 @@ namespace Softuni_Fest.Pages
                 return;
             }
 
+            if (!string.IsNullOrEmpty(SearchTerm)) 
+            {
+                List<User> recommendedVendors = await _UserRepository.GetUsersFromSearchTerm(SearchTerm);
+                Products = (await GetAllProductsForClient()).Where(x => recommendedVendors.Any(s => s.Id == x.VendorId)).ToList();
+                return;
+            }
+
             Products = await GetAllProductsForClient();
         }
+
+        public List<User> Users { get; private set; } = null!;
 
         public async Task<IActionResult> OnPostDelete(string productId)
         {
@@ -44,7 +58,6 @@ namespace Softuni_Fest.Pages
             return await GetAllProductsForClient();
         }
 
-        public List<Product> Products { get; set; } = null!;
         public async Task<List<Product>> GetAllProductsForBusiness()
         {
             string userId = _UserManager.GetUserId(User);
@@ -57,16 +70,33 @@ namespace Softuni_Fest.Pages
             List<Product> products = (await _ProductRepository.GetProductsAsync()).ToList();
             return products;
         }
+        public async Task GetRecommendedUsers(string username)
+        {
+            Users = (await _UserRepository.GetRecommendedUser(username)).ToList();
+        }
+        public async Task GetRecommendedProducts()
+        {
+            Products = new List<Product>();
+            foreach (User user in Users)
+            {
+                List<Product> productsForVendor = (await _ProductRepository.GetProductsAsyncForVendorId(user.Id)).ToList();
+                Products.AddRange(productsForVendor);
+            }
+        }
 
-        // the user selected quantity of the product
-        [BindProperty]
-        [Range(1, 20, ErrorMessage = "{0} should be between {1} and {2}")]
-        [Display(Name = "Quantity")]
-        public int ProductQuantity { get; set; } = 1;
+        public async Task<User> GetVendorById(string vendorId)
+        {
+            return await _UserRepository.GetUserAsync(vendorId);
+        }
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+        public List<Product> Products { get; set; } = null!;
 
         private readonly IProductRepository _ProductRepository;
         private readonly UserManager<User> _UserManager;
+        private readonly IUserRepository _UserRepository;
         private readonly ILogger<CatalogModel> _Logger;
+        private readonly RoleManager<IdentityRole> _RoleManager;
     }
 }

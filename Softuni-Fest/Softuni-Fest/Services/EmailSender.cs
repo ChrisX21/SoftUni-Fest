@@ -8,20 +8,12 @@ namespace Softuni_Fest.Services
     {
         public void Send(string from, string to, string subject, string messageText)
         {
-            SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Host = "smtp.gmail.com";
-            smtpClient.Port = 587;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("otpusnatitemomcheta@gmail.com", "snusoclock");
-            smtpClient.EnableSsl = true;
-
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(from);
-            mailMessage.To.Add(new MailAddress(to));
-            mailMessage.Subject = subject;
-            mailMessage.Body = messageText;
-
-            smtpClient.Send(mailMessage);
+            var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("cc7ab3acd43449", "684e8a1d899a1a"),
+                EnableSsl = true
+            };
+            client.Send("otpusnatitemomcheta@gmail.com", "dani.d.game@gmail.com", "Hello world", "testbody");
         }
 
         public void Send(MailMessage message)
