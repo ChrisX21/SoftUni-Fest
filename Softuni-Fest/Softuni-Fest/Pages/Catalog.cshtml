@@ -37,7 +37,7 @@
                 {
                     <th style="text-align: center">Options</th>
                 }
-                else if (User.IsInRole(Roles.Client))
+                else
                 {
                     <th style="text-align: center">Vendor</th>
                 }
@@ -47,7 +47,7 @@
             @foreach(var product in Model.Products)
             {
                 <tr>
-                    <td width="20%">
+                    <td width="20%" style="text-align:center">
                         @if (User.IsInRole(Roles.Business))
                         {
                             <a class="nav-link">@product.ProductName</a>
@@ -57,7 +57,7 @@
                             <a class="nav-link" asp-page="/Product" asp-route-productId="@product.Id">@product.ProductName</a>
                         }
                     </td>
-                    <td width="20%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
+                    <td width="20%" style="text-align:center">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
                     @if(User.IsInRole(Roles.Business))
                     {
                         <form id="deleteItemForm" method="post" asp-page-handler="Delete" asp-route-productId="@product.Id">
@@ -66,9 +66,11 @@
                             </td>
                         </form>
                     }
-                    <td>
+                    else{
+                    <td style="text-align:center">
                         @((await Model.GetVendorById(product.VendorId)).NamePersonal)
                     </td>
+                        }
                 </tr>
             }
         </tbody>
