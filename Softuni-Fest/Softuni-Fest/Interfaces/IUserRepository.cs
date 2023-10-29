@@ -10,5 +10,6 @@
         Task<User> GetUserAsync(string id);
         Task<ICollection<User>> GetUsersAsync();
         Task<ICollection<User>> GetRecommendedUser(string term);
+        Task<List<User>> GetUsersFromSearchTerm(string searchTerm);
     }
 }

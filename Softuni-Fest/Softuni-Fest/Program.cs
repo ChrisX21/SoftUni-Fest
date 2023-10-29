@@ -19,7 +19,7 @@ namespace Softuni_Fest
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -35,6 +35,7 @@ namespace Softuni_Fest
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
+            //builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mail"));
 
             var app = builder.Build();
 
