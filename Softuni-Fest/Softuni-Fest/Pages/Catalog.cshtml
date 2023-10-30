@@ -36,7 +36,7 @@
                 {
                     <th style="text-align: center">Options</th>
                 }
-                else if (User.IsInRole(Roles.Client))
+                else
                 {
                     <th style="text-align: center">Vendor</th>
                 }
@@ -46,7 +46,7 @@
             @foreach(var product in Model.Products)
             {
                 <tr>
-                    <td width="20%">
+                    <td width="20%" style="text-align:center">
                         @if (User.IsInRole(Roles.Business))
                         {
                             <a class="nav-link">@product.ProductName</a>
@@ -67,9 +67,11 @@
                             </td>
                         </form>
                     }
-                    <td>
+                    else{
+                    <td style="text-align:center">
                         @((await Model.GetVendorById(product.VendorId)).NamePersonal)
                     </td>
+                        }
                 </tr>
             }
         </tbody>
