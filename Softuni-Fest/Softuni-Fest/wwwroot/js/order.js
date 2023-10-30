@@ -1,32 +1,40 @@
-﻿let valid = true;
-function attachOnChangeEventToAllQuantityInputs()
+﻿function setup()
 {
-	const quantityInputs = document.querySelectorAll('.form-control');
-	const span = document.createElement('span');
-	span.className = 'text-danger';
-	span.textContent = 'Quantity should be between 1 and 20';
+	attachEventToQuantitySelects();
+}
 
+function attachEventToQuantitySelects()
+{
+	const quantityInputs = document.getElementsByName('quantitySelect');
 	for (const quantityInput of quantityInputs)
-	{
+    {
+        const id = quantityInput.parentNode.parentNode.attributes['data-order-item-id'].value;
 		quantityInput.addEventListener('change', (event) =>
 		{
-			const value = quantityInput.value;
-			if (!(value >= 1 && value <= 20)) {
-				quantityInput.parentNode.appendChild(span);
-				valid = false;
-			}
-			else {
-				valid = true;
-			}
+            $.ajax({
+                type: "POST",
+                url: "/cart?handler=UpdateItem",
+                data: {
+                    orderItemId: id,
+                    quantity: event.target.value
+                },
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                complete: (response) => {
+                    if(response.status == 200)
+                        $('#totalPrice').load('/cart?handler=PricePartial');
+                }
+            });
 		});
-		
+
 	}
 }
 
-function checkout()
+async function checkout()
 {
-	if (valid)
-		document.getElementById('checkoutForm').submit();
+	document.getElementById('checkoutForm').submit();
 }
 
-attachOnChangeEventToAllQuantityInputs();
+setup();

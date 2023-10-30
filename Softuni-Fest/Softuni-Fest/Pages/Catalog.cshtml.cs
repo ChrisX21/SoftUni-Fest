@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -47,7 +46,7 @@ namespace Softuni_Fest.Pages
         public async Task<IActionResult> OnPostDelete(string productId)
         {
             await _ProductRepository.RemoveProductAsync(productId);
-            return RedirectToPage("/Catalog");
+            return RedirectToPage("/catalog");
         }
 
         public async Task<List<Product>> GetProductsForCurrentUser()

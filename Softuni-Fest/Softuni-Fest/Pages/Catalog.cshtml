@@ -1,10 +1,9 @@
-﻿@page
+﻿@page "/catalog"
 @using Softuni_Fest.Models
 @using System.Globalization
 @model Softuni_Fest.Pages.CatalogModel
 @{
     ViewData["Title"] = "Catalog";
-    CultureInfo bgCulture = new CultureInfo("en-BG");
 }
 
 <div class="container p-3">
@@ -23,7 +22,7 @@
         @if (User.IsInRole(Roles.Business))
         {
             <div class="col-6">
-                <a asp-page="Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
+                <a asp-page="/Create" class="btn btn-primary" style="margin-left:70%; margin-top: 2%">Create new product</a>
             </div>
         }
     </div>
@@ -57,7 +56,9 @@
                             <a class="nav-link" asp-page="/Product" asp-route-productId="@product.Id">@product.ProductName</a>
                         }
                     </td>
-                    <td width="20%">@((product.ProductPrice / 100m).ToString("C2", bgCulture))</td>
+                    <td width="20%">
+                        <partial name="_PricePartial" model="@product.ProductPrice / 100m">
+                    </td>
                     @if(User.IsInRole(Roles.Business))
                     {
                         <form id="deleteItemForm" method="post" asp-page-handler="Delete" asp-route-productId="@product.Id">

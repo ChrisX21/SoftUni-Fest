@@ -1,0 +1,7 @@
+﻿@model decimal
+@using System.Globalization
+@{
+	CultureInfo bgCultureInfo = new CultureInfo("en-BG");
+}
+
+@Model.ToString("C2", bgCultureInfo)

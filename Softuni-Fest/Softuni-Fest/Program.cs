@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Softuni_Fest.Interfaces;
+using Softuni_Fest.Models;
+using Softuni_Fest.Repositories;
 using Softuni_Fest.Repository;
 using Softuni_Fest.Services;
+using Softuni_Fest.Source.Interfaces;
+using Softuni_Fest.Source.Repository;
 using Stripe;
 
 namespace Softuni_Fest
@@ -27,13 +31,20 @@ namespace Softuni_Fest
             builder.Services.AddTransient<SeedData>();
             builder.Services.AddHostedService<SeederService>();
 
+            // add repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderProductsRepository, OrderProductsRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<StripeService>();
-            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            builder.Services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+            builder.Services.AddScoped<IOrderOrderStatusRepository, OrderOrderStatusRepository>();
 
+            // add services
+            builder.Services.AddScoped<StripeService>();
+            builder.Services.AddScoped<OrderService>();
+
+            // add configurations
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
             //builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("Mail"));
 

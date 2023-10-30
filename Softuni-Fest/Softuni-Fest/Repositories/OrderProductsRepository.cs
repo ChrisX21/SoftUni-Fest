@@ -16,16 +16,9 @@ namespace Softuni_Fest.Repository
             return await SaveAsync();
         }
 
-        public async Task<OrderProduct?> GetOrderProductAsync(string id)
+        public async Task<OrderProduct?> GetOrderItemAsync(string id)
         {
             return await _Context.OrderProducts.FindAsync(id);
-        }
-
-        public async Task<OrderProduct> GetOrderProductForOrderAndProductAsync(string productId, string orderId)
-        {
-            return await _Context.OrderProducts
-                .Where(x => x.ProductId == productId && x.OrderId == orderId)
-                .FirstOrDefaultAsync();
         }
 
         public async Task<OrderProduct?> GetOrderItemAsync(string orderId, string productId)
@@ -42,9 +35,9 @@ namespace Softuni_Fest.Repository
                 await CreateOrderItemAsync(orderId, productId);
         }
 
-        public async Task<bool> RemoveOrderAsync(string orderItemId) 
+        public async Task<bool> RemoveOrderItemAsync(string orderItemId) 
         {
-            OrderProduct? orderItem = await GetOrderProductAsync(orderItemId);
+            OrderProduct? orderItem = await GetOrderItemAsync(orderItemId);
             if (orderItem is null)
                 return false;
 
@@ -86,16 +79,6 @@ namespace Softuni_Fest.Repository
             return await _Context.OrderProducts.AnyAsync(x => x.Id == id);
         }
 
-        public async Task<bool> OrderProductExistsForOrderAndProductAsync(string productId, string orderId)
-        {
-            return await _Context.OrderProducts.AnyAsync(x => x.ProductId == productId && x.OrderId == orderId);
-        }
-
-        public async Task<bool> RemoveOrderProductAsync(OrderProduct orderProduct)
-        {
-            _Context.Remove(orderProduct);
-            return await SaveAsync();
-        }
 
         public async Task<bool> SaveAsync()
         {
@@ -103,7 +86,7 @@ namespace Softuni_Fest.Repository
             return saved > 0 ? true : false;
         }
 
-        public async Task<bool> UpdateOrderProductAsync(OrderProduct orderProduct)
+        public async Task<bool> UpdateOrderItemAsync(OrderProduct orderProduct)
         {
             _Context.Update(orderProduct);
             return await SaveAsync();

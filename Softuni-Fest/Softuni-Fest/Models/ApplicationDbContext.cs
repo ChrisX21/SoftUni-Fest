@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Softuni_Fest.Models;
 
 namespace Softuni_Fest
 {
@@ -20,5 +21,19 @@ namespace Softuni_Fest
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderProduct> OrderProducts { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<OrderStatus> OrderStatuses { get; set; } = null!;
+        public virtual DbSet<OrderOrderStatus> OrderOrderStatuses { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<OrderOrderStatus>(x =>
+            {
+                x.HasKey(r => new { r.OrderId, r.OrderStatusId });
+                x.ToTable("OrderOrderStatuses");
+            }
+            );
+        }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Softuni_Fest.Interfaces;
 using Softuni_Fest.Models;
+using Softuni_Fest.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace Softuni_Fest.Pages
@@ -10,13 +11,13 @@ namespace Softuni_Fest.Pages
     public class ProductModel : PageModel
     {
         public ProductModel(IProductRepository productRepository,
-                            IOrderRepository orderRepository,
+                            OrderService orderService,
                             IOrderProductsRepository orderProductsRepository,
                             UserManager<User> userManager,
                             ILogger<ProductModel> logger) 
         {
             _ProductRepository = productRepository;
-            _OrderRepository = orderRepository;
+            _OrderService = orderService;
             _OrderProductRepository = orderProductsRepository;
             _UserManager = userManager;
             _Logger = logger;
@@ -27,24 +28,24 @@ namespace Softuni_Fest.Pages
             Product = await _ProductRepository.GetProductByIdAsync(productId);
         }
 
-        public async Task<IActionResult> OnPost(string productId) 
+        public async Task<IActionResult> OnPostAddItemToCart(string productId) 
         {
             if (!User.IsInRole(Roles.Client))
                 return Redirect("/Identity/Account/Login");
             string userId = _UserManager.GetUserId(User);
-            Order? order = await _OrderRepository.GetOrCreateOrderForUserAsync(userId);
+            Order? order = await _OrderService.GetOrCreatePendingOrderAsync(userId);
 
             if (order is null)
             {
                 _Logger.LogError("Couldn't retrieve or create order");
-                return LocalRedirect("/Catalog");
+                return LocalRedirect("/catalog");
             }
 
             Product? product = await _ProductRepository.GetProductByIdAsync(productId);
             if (product is null)
             {
                 _Logger.LogError("Invalid product id");
-                return LocalRedirect("/Catalog");
+                return LocalRedirect("/catalog");
             }
 
             OrderProduct? orderProduct =
@@ -54,12 +55,12 @@ namespace Softuni_Fest.Pages
             if (orderProduct is null)
             {
                 _Logger.LogError("Couldn't retrieve or create cart item");
-                return LocalRedirect("/Catalog");
+                return LocalRedirect("/catalog");
             }
 
             orderProduct.Quantity += Input.Quantity;
             await _OrderProductRepository.SaveAsync();
-            return LocalRedirect("/Catalog");
+            return LocalRedirect("/catalog");
         }
 
         [BindProperty]
@@ -75,7 +76,7 @@ namespace Softuni_Fest.Pages
         public Product? Product { get; set; }
 
         private IProductRepository _ProductRepository;
-        private IOrderRepository _OrderRepository;
+        private OrderService _OrderService;
         private IOrderProductsRepository _OrderProductRepository;
         private UserManager<User> _UserManager;
         private ILogger<ProductModel> _Logger;

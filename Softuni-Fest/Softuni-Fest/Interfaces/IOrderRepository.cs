@@ -14,5 +14,6 @@
         Task<ICollection<Order>> GetOrdersAsync();
         Task<ICollection<Order>> GetOrdersForUserAsync(string userId);
 
+        IQueryable<Order> Orders { get; }
     }
 }

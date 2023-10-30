@@ -6,21 +6,22 @@ using Softuni_Fest.Interfaces;
 using Softuni_Fest.Models;
 using Softuni_Fest.Services;
 using Stripe.Checkout;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Options;
 
 namespace Softuni_Fest.Pages
 {
     [Authorize(Roles = Roles.Client)]
     public class OrdersModel : PageModel
     {
-        public OrdersModel(IOrderRepository orderRepository,
+        public OrdersModel(OrderService orderService,
                         IOrderProductsRepository orderProductsRepository,
                         IProductRepository productRepository,
                         StripeService striveService,
+                        IOptions<StripeSettings> options,
                         UserManager<User> userManager,
                         ILogger<OrdersModel> logger)
         {
-            _OrderRepository = orderRepository;
+            _OrderService = orderService;
             _OrderItemRepository = orderProductsRepository;
             _ProductRepository = productRepository;
             
@@ -34,6 +35,7 @@ namespace Softuni_Fest.Pages
 
             _UserManager = userManager;
             _Logger = logger;
+            _StripeSettings = options.Value;
         }
 
         public async Task OnGet()
@@ -42,21 +44,14 @@ namespace Softuni_Fest.Pages
             if (OrderItems is null)
                 return;
 
-            Quantities = new long[OrderItems.Count];
-            for (int i = 0; i < OrderItems.Count; i++) 
-            {
-                Quantities[i] = OrderItems[i].Quantity;
-            }
+            TotalPrice = CalculateTotalPrice(OrderItems);
         }
 
-        public async Task<ActionResult> OnPost()
+        public async Task<ActionResult> OnPostCheckout()
         {
             OrderItems = await GetOrderItemsForCurrentUser();
             if (OrderItems is null || Order is null)
                 return Page();
-
-            for (int i = 0; i < Quantities.Length; i++)
-                OrderItems[i].Quantity = Quantities[i];
 
             _Logger.LogInformation("Checking out");
             Session? session = await _StripeService.Checkout(OrderItems);
@@ -67,7 +62,7 @@ namespace Softuni_Fest.Pages
                 return StatusCode(500);
             }
 
-            if (!await _OrderRepository.RemoveOrderAsync(Order)) 
+            if (!await _OrderService.CompleteOrderAsync(Order))
             {
                 await _StripeService.ExpireOrderAsync(session.Id);
                 _Logger.LogError("Couldn't finish the order");
@@ -79,23 +74,43 @@ namespace Softuni_Fest.Pages
 
         public async Task<ActionResult> OnPostRemoveItem(string orderItemId) 
         {
-            await _OrderItemRepository.RemoveOrderAsync(orderItemId);
-            return Redirect("/Orders");
+            await _OrderItemRepository.RemoveOrderItemAsync(orderItemId);
+            return Redirect("/cart");
         }
 
-        public async Task<Product?> GetProductAsync(string productId) 
+        public async Task<ActionResult> OnPostUpdateItem(string orderItemId, long quantity) 
+        {
+            OrderProduct? orderItem = await _OrderItemRepository.GetOrderItemAsync(orderItemId);
+            if (orderItem is null) 
+            {
+                _Logger.LogError("Order item is null");
+                return StatusCode(500);
+            }
+
+            orderItem.Quantity = quantity;
+            await _OrderItemRepository.UpdateOrderItemAsync(orderItem);
+            return StatusCode(200);
+        }
+
+        public async Task<PartialViewResult> OnGetPricePartial() 
+        {
+			List<OrderProduct>? orderItems = await GetOrderItemsForCurrentUser();
+            if (orderItems is null)
+                return Partial("_PricePartial", 0.0);
+
+            TotalPrice = CalculateTotalPrice(orderItems);
+			return Partial("_PricePartial", TotalPrice);
+		}
+
+
+		public async Task<Product?> GetProductAsync(string productId) 
         {
             return await _ProductRepository.GetProductByIdAsync(productId);
         }
 
-        public Product? GetProduct(string productId) 
-        {
-            return _ProductRepository.GetProductById(productId);
-        }
-
         public async Task<List<OrderProduct>?> GetOrderItemsForUser(string userId) 
         {
-            Order = await _OrderRepository.GetOrderForUserAsync(userId);
+            Order = await _OrderService.GetPendingOrderForUserAsync(userId);
             if (Order is null)
             {
                 _Logger.LogWarning("User doesn't have any orders");
@@ -112,17 +127,33 @@ namespace Softuni_Fest.Pages
         }
 
         [BindProperty]
-        [Range(1, int.MaxValue, ErrorMessage = "The {0} should be between {1} {2}")]
-        [Display(Name = "Quantity")]
-        public long[] Quantities { get; set; }
+        public List<OrderProduct>? OrderItems { get; set; }
+        public decimal TotalPrice { get; set; }
 
-        public List<OrderProduct>? OrderItems { get; set; } = null;
         public Order? Order { get; set; } = null;
+        public int[] Quantities = new int[] 
+        {
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+        };
 
-        private IOrderRepository _OrderRepository;
+        private decimal CalculateTotalPrice(List<OrderProduct> orderItems)
+        {
+            return orderItems.Sum((x) =>
+            {
+                Product? product = _ProductRepository.GetProductById(x.ProductId);
+                if (product is null)
+                    return 0;
+
+                return product.ProductPrice * x.Quantity;
+            }) / 100m;
+        }
+
+        private OrderService _OrderService;
         private IOrderProductsRepository _OrderItemRepository;
         private IProductRepository _ProductRepository;
         private StripeService _StripeService;
+        private StripeSettings _StripeSettings;
         private UserManager<User> _UserManager;
         private ILogger<OrdersModel> _Logger;
     }

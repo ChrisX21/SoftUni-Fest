@@ -60,9 +60,9 @@ namespace Softuni_Fest.Pages
             };
 
             if (!await _ProductRepository.AddProductAsync(product))
-                return RedirectToPage("/Catalog");
+                return RedirectToPage("/catalog");
 
-            return RedirectToPage("/Catalog");
+            return RedirectToPage("/catalog");
         }
     }
 }

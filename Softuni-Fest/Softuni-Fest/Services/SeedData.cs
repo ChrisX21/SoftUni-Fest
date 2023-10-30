@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Softuni_Fest.Models;
+using Softuni_Fest.Services;
+using Softuni_Fest.Source.Interfaces;
 
 namespace Softuni_Fest
 {
@@ -9,12 +11,16 @@ namespace Softuni_Fest
 		public SeedData(ApplicationDbContext context,
 						RoleManager<IdentityRole> roleManager,
 						UserManager<User> userManager,
-                        IUserStore<User> userStore)
+                        IUserStore<User> userStore,
+						IOrderStatusRepository orderStatusRepository,
+						OrderService orderService)
 		{
 			_RoleManager = roleManager;
 			_UserManager = userManager;
 			_Context = context;
 			_UserStore = userStore;
+			_OrderStatusRepository = orderStatusRepository;
+			_OrderService = orderService;
 		}
 
 		public async Task SeedRolesAsync()
@@ -73,14 +79,7 @@ namespace Softuni_Fest
 				return;
 
             User user = await _Context.Users.FirstAsync(x => x.UserName == _ClientEmail);
-
-			Order order = new Order() 
-			{
-				UserId = user.Id
-			};
-
-            await _Context.Orders.AddAsync(order);
-            await _Context.SaveChangesAsync();
+			await _OrderService.CreateOrderAsync(user.Id, OrderStatus.Pending);
         }
 
 		public async Task SeedCartItemAsync()
@@ -108,10 +107,31 @@ namespace Softuni_Fest
 				await _RoleManager.CreateAsync(role);
 		}
 
+		public async Task SeedOrderStatusesAsync() 
+		{
+			string[] statuses = new string[] { OrderStatus.Completed, OrderStatus.Pending };
+
+			if(!await _OrderStatusRepository.AnyAsync())
+			{
+				foreach (var status in statuses)
+				{
+					OrderStatus orderStatus = new OrderStatus()
+					{
+						Name = status,
+						NormalizedName = status.ToUpper()
+					};
+
+					await _OrderStatusRepository.CreatOrderStatusAsync(orderStatus);
+				}
+			}
+		}
+
 		private readonly RoleManager<IdentityRole> _RoleManager;
 		private readonly UserManager<User> _UserManager;
 		private readonly ApplicationDbContext _Context;
 		private readonly IUserStore<User> _UserStore;
+		private readonly IOrderStatusRepository _OrderStatusRepository;
+		private readonly OrderService _OrderService;
 		private const string _Password = "test@T1";
 		private const string _BusinessEmail = "test@business.com";
 		private const string _ClientEmail = "test@client.com";
@@ -133,6 +153,7 @@ namespace Softuni_Fest
 				await seeder.SeedRolesAsync();
 				await seeder.SeedUserAsync();
 				await seeder.SeedProductsAsync();
+				await seeder.SeedOrderStatusesAsync();
 				await seeder.SeedOrderAsync();
 				await seeder.SeedCartItemAsync();
 			}

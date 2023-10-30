@@ -6,6 +6,12 @@ namespace Softuni_Fest.Repository
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _Context;
+
+        public IQueryable<Order> Orders 
+        {
+            get => _Context.Set<Order>();
+        }
+
         public OrderRepository(ApplicationDbContext context)
         {
             _Context = context;
